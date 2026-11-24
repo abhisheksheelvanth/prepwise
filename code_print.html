@@ -1,0 +1,4009 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Prepwise Source Code - index.html</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 14mm 12mm 14mm 12mm;
+  }
+  body {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 7pt;
+    line-height: 1.35;
+    color: #1e293b;
+    background: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+  .header {
+    border-bottom: 2px solid #2563eb;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .header h1 {
+    font-size: 13pt;
+    color: #0d1b3e;
+    margin: 0;
+    font-weight: 800;
+  }
+  .header .meta {
+    font-size: 8pt;
+    color: #64748b;
+  }
+  pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-family: inherit;
+    font-size: inherit;
+  }
+  code {
+    font-family: inherit;
+    font-size: inherit;
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <h1>Prepwise – Complete Application Source Code (index.html)</h1>
+    <div class="meta">Web-Based Aptitude Practice and Diagnostic Assessment Platform</div>
+  </div>
+  <div style="text-align:right">
+    <div style="font-weight:700;color:#2563eb;font-size:9pt">Prepwise v2.0</div>
+    <div class="meta">Self-Contained HTML / CSS / JavaScript</div>
+  </div>
+</div>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Prepwise â€“ Aptitude Practice &amp; Diagnostic Assessment&lt;/title&gt;
+&lt;style&gt;
+  /* ===========================================================
+     DESIGN TOKENS &amp; BASE STYLING
+     Clean, professional, high-contrast, human-friendly palette
+     =========================================================== */
+  :root {
+    --navy: #0d1b3e;
+    --navy-light: #162a5b;
+    --blue: #2563eb;
+    --blue-hover: #1d4fd0;
+    --blue-soft: #eff5ff;
+    --blue-line: #d2e0f8;
+    --text: #1b2640;
+    --muted: #576582;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --card-alt: #f1f5f9;
+    
+    --good: #16a34a;
+    --good-dark: #15803d;
+    --good-bg: #ecfdf3;
+    --good-border: #bbf7d0;
+
+    --bad: #dc2626;
+    --bad-dark: #b91c1c;
+    --bad-bg: #fef2f2;
+    --bad-border: #fecaca;
+
+    --warn: #d97706;
+    --warn-bg: #fffbeb;
+    --warn-border: #fde68a;
+
+    --purple: #7c3aed;
+    --purple-bg: #f5f3ff;
+    --purple-border: #ddd6fe;
+
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-pill: 999px;
+    --shadow-sm: 0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
+    --shadow: 0 4px 18px rgba(13,27,62,0.08);
+    --shadow-lg: 0 12px 30px rgba(13,27,62,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+  button { font: inherit; cursor: pointer; border: none; }
+  input, select, textarea { font: inherit; }
+  .hidden { display: none !important; }
+
+  /* ===========================================================
+     NAVIGATION BAR
+     =========================================================== */
+  header.bar {
+    background: #ffffff;
+    border-bottom: 1px solid var(--blue-line);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header.bar .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    gap: 16px;
+  }
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--navy);
+    background: none;
+    text-decoration: none;
+  }
+  .logo-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--blue), #1e40af);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 1.15rem;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+  }
+  .brand-tag {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--blue);
+    background: var(--blue-soft);
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--blue-line);
+  }
+
+  nav.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-btn {
+    background: transparent;
+    color: var(--muted);
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.92rem;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-btn:hover {
+    color: var(--navy);
+    background: var(--blue-soft);
+  }
+  .nav-btn.active {
+    color: var(--blue);
+    background: var(--blue-soft);
+    font-weight: 700;
+  }
+  .nav-badge {
+    background: var(--warn);
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 1px 6px;
+    border-radius: 99px;
+    font-weight: 700;
+  }
+
+  /* Auth / User area in bar */
+  .auth-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .user-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px 5px 6px;
+    background: var(--blue-soft);
+    border: 1px solid var(--blue-line);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .user-badge:hover {
+    background: #e2edff;
+  }
+  .user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: grid;
+    place-items: center;
+  }
+  .user-name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--navy);
+    max-width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ===========================================================
+     BUTTONS &amp; COMMON UI
+     =========================================================== */
+  .btn {
+    background: var(--blue);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.92rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(37,99,235,0.2);
+  }
+  .btn:hover { background: var(--blue-hover); transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .btn.ghost {
+    background: #ffffff;
+    color: var(--navy);
+    border: 1.5px solid var(--blue-line);
+    box-shadow: none;
+  }
+  .btn.ghost:hover {
+    background: var(--blue-soft);
+    border-color: var(--blue);
+    color: var(--blue);
+  }
+
+  .btn.sm {
+    padding: 6px 12px;
+    font-size: 0.82rem;
+    border-radius: 6px;
+  }
+  .btn.danger {
+    background: #ffffff;
+    color: var(--bad);
+    border: 1.5px solid var(--bad-border);
+  }
+  .btn.danger:hover {
+    background: var(--bad-bg);
+  }
+  .btn.success {
+    background: var(--good);
+    color: #fff;
+  }
+  .btn.success:hover { background: var(--good-dark); }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-size: 1.85rem;
+    color: var(--navy);
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 0.98rem;
+    max-width: 680px;
+    margin-bottom: 24px;
+  }
+
+  /* Tags &amp; Pills */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .tag.blue { background: var(--blue-soft); color: var(--blue); border: 1px solid var(--blue-line); }
+  .tag.green { background: var(--good-bg); color: var(--good-dark); border: 1px solid var(--good-border); }
+  .tag.red { background: var(--bad-bg); color: var(--bad-dark); border: 1px solid var(--bad-border); }
+  .tag.amber { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); }
+  .tag.purple { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+  .tag.gray { background: #f1f5f9; color: var(--muted); border: 1px solid #e2e8f0; }
+
+  /* ===========================================================
+     HOME VIEW
+     =========================================================== */
+  .hero-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f7faff 100%);
+    border: 1px solid var(--blue-line);
+    border-radius: var(--radius);
+    padding: 44px 36px;
+    margin-top: 32px;
+    box-shadow: var(--shadow);
+  }
+  .hero-card h1 {
+    font-size: clamp(1.9rem, 4.2vw, 2.7rem);
+    color: var(--navy);
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 8px 0 14px;
+  }
+  .hero-card p.lead {
+    font-size: 1.08rem;
+    color: var(--muted);
+    max-width: 720px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .hero-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .hero-feat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    border: 1px solid var(--blue-line);
+    padding: 8px 16px;
+    border-radius: var(--radius-pill);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--navy);
+    box-shadow: var(--shadow-sm);
+  }
+  .hero-feat-chip span.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--blue);
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  /* User banner when signed in */
+  .user-welcome-banner {
+    margin-top: 24px;
+    background: #ffffff;
+    border: 1px solid var(--blue-line);
+    border-left: 5px solid var(--blue);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow-sm);
+  }
+  .uw-left h3 {
+    font-size: 1.05rem;
+    color: var(--navy);
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .uw-left p {
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .uw-weak-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+
+  /* Category Grid */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .cat-card {
+    background: var(--card);
+    border: 1.5px solid var(--blue-line);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    text-align: left;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-card:hover {
+    border-color: var(--blue);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+  .cat-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .cat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--blue-soft);
+    color: var(--blue);
+    display: grid;
+    place-items: center;
+    font-size: 1.4rem;
+    font-weight: 800;
+    border: 1px solid var(--blue-line);
+  }
+  .cat-card h3 {
+    font-size: 1.25rem;
+    color: var(--navy);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .cat-card p.cat-desc {
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .cat-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+  .cat-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid var(--blue-line);
+  }
+  .cat-meta-txt {
+    font-size: 0.84rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  /* Diagnostic Highlight Banner */
+  .diag-banner {
+    background: var(--navy);
+    color: #ffffff;
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin: 36px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .diag-banner h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .diag-banner p {
+    color: #cbd5e1;
+    font-size: 0.92rem;
+    max-width: 620px;
+  }
+
+  /* Objectives &amp; Workflow */
+  .obj-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+  }
+  .obj-item {
+    background: #ffffff;
+    border: 1px solid var(--blue-line);
+    border-radius: var(--radius);
+    padding: 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .obj-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--blue-soft);
+    color: var(--blue);
+    font-weight: 800;
+    display: grid;
+    place-items: center;
+    flex: none;
+    font-size: 0.95rem;
+  }
+  .obj-body h4 {
+    color: var(--navy);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .obj-body p {
+    color: var(--muted);
+    font-size: 0.86rem;
+    line-height: 1.45;
+  }
+
+  /* ===========================================================
+     TEST VIEW
+     =========================================================== */
+  .test-shell {
+    padding: 24px 0 48px;
+  }
+  .test-panel {
+    background: var(--card);
+    border: 1px solid var(--blue-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 30px;
+  }
+  .test-head-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--blue-line);
+  }
+  .th-title-group h2 {
+    font-size: 1.35rem;
+    color: var(--navy);
+    font-weight: 800;
+  }
+  .th-title-group .th-sub {
+    font-size: 0.85rem;
+    color: var(--muted);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 2px;
+  }
+  .timer-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-soft);
+    color: var(--navy);
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    font-size: 1.35rem;
+    padding: 6px 18px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--blue-line);
+  }
+  .timer-pill.low {
+    background: var(--bad-bg);
+    color: var(--bad);
+    border-color: var(--bad-border);
+    animation: timerPulse 1s infinite alternate;
+  }
+  @keyframes timerPulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.03); }
+  }
+
+  /* Progress Bar */
+  .test-progress-bar {
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .test-progress-fill {
+    height: 100%;
+    background: var(--blue);
+    transition: width 0.25s ease;
+  }
+
+  /* Question Card */
+  .q-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 0.86rem;
+  }
+  .q-badge-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .q-timer-badge {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .q-text {
+    font-size: 1.22rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  /* Options */
+  .options-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .opt-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    text-align: left;
+    background: #ffffff;
+    border: 1.5px solid var(--blue-line);
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 0.98rem;
+    color: var(--text);
+    transition: all 0.12s ease;
+  }
+  .opt-btn:hover {
+    border-color: var(--blue);
+    background: var(--blue-soft);
+  }
+  .opt-btn.selected {
+    border-color: var(--blue);
+    background: var(--blue-soft);
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.25);
+    font-weight: 600;
+  }
+  .opt-letter {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1.5px solid var(--blue);
+    color: var(--blue);
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 0.88rem;
+    flex: none;
+    transition: all 0.12s ease;
+  }
+  .opt-btn.selected .opt-letter {
+    background: var(--blue);
+    color: #ffffff;
+  }
+
+  /* Bottom navigation bar in test */
+  .test-footer-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 18px;
+    border-top: 1px solid var(--blue-line);
+  }
+  .mark-btn {
+    background: transparent;
+    border: 1.5px dashed var(--muted);
+    color: var(--muted);
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.86rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+  .mark-btn.marked {
+    border-color: var(--warn);
+    background: var(--warn-bg);
+    color: var(--warn);
+    border-style: solid;
+  }
+
+  /* Question Palette */
+  .palette-wrap {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--blue-line);
+  }
+  .palette-legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .pl-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pl-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+  .pl-dot.cur { background: var(--blue); }
+  .pl-dot.ans { background: var(--blue-soft); border: 1.5px solid var(--blue); }
+  .pl-dot.mrk { background: var(--warn-bg); border: 1.5px solid var(--warn); }
+  .pl-dot.unt { background: #ffffff; border: 1.5px solid var(--blue-line); }
+
+  .palette-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .p-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    border: 1.5px solid var(--blue-line);
+    background: #ffffff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--muted);
+    display: grid;
+    place-items: center;
+    transition: all 0.15s ease;
+    position: relative;
+  }
+  .p-btn:hover { border-color: var(--blue); }
+  .p-btn.answered {
+    background: var(--blue-soft);
+    border-color: var(--blue);
+    color: var(--blue);
+  }
+  .p-btn.marked {
+    background: var(--warn-bg);
+    border-color: var(--warn);
+    color: var(--warn);
+  }
+  .p-btn.marked::after {
+    content: &quot;â€¢&quot;;
+    position: absolute;
+    top: -2px;
+    right: 4px;
+    font-size: 16px;
+    color: var(--warn);
+  }
+  .p-btn.current {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(37,99,235,0.3);
+  }
+
+  /* ===========================================================
+     RESULT VIEW
+     =========================================================== */
+  .result-panel {
+    background: var(--card);
+    border: 1px solid var(--blue-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 36px 30px;
+    text-align: center;
+  }
+  .score-conic-ring {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    margin: 14px auto 18px;
+    display: grid;
+    place-items: center;
+    background: conic-gradient(var(--blue) var(--pct, 0%), #e2e8f0 0);
+    box-shadow: 0 4px 14px rgba(37,99,235,0.15);
+  }
+  .score-conic-ring-inner {
+    width: 126px;
+    height: 126px;
+    border-radius: 50%;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-conic-ring-inner b {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.1;
+  }
+  .score-conic-ring-inner span {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin: 24px 0;
+  }
+  .stat-box {
+    background: var(--blue-soft);
+    border: 1px solid var(--blue-line);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .stat-box b {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--navy);
+  }
+  .stat-box span {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .stat-box.good b { color: var(--good); }
+  .stat-box.bad b { color: var(--bad); }
+  .stat-box.warn b { color: var(--warn); }
+
+  /* Diagnostic card on result screen */
+  .res-diagnostic-card {
+    background: #ffffff;
+    border: 1.5px solid var(--blue-line);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin: 22px 0;
+    text-align: left;
+  }
+  .rd-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .rd-item {
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .rd-item.weak {
+    background: var(--bad-bg);
+    border: 1px solid var(--bad-border);
+    color: var(--bad-dark);
+  }
+  .rd-item.strong {
+    background: var(--good-bg);
+    border: 1px solid var(--good-border);
+    color: var(--good-dark);
+  }
+
+  /* ===========================================================
+     DETAILED ANSWER REVIEW VIEW (Core Feature)
+     =========================================================== */
+  .review-header-card {
+    background: #ffffff;
+    border: 1px solid var(--blue-line);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--blue-line);
+  }
+  .filter-btns {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--blue-line);
+    background: #ffffff;
+    color: var(--muted);
+    font-size: 0.84rem;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .filter-btn.active {
+    background: var(--blue);
+    color: #ffffff;
+    border-color: var(--blue);
+  }
+
+  /* Individual Review Question Card */
+  .rq-card {
+    background: #ffffff;
+    border: 1.5px solid var(--blue-line);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    border-left-width: 6px;
+    transition: transform 0.15s ease;
+  }
+  .rq-card.status-correct { border-left-color: var(--good); }
+  .rq-card.status-wrong { border-left-color: var(--bad); }
+  .rq-card.status-skipped { border-left-color: var(--warn); }
+
+  .rq-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .rq-badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .rq-bookmark-btn {
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--blue-line);
+    transition: all 0.15s;
+  }
+  .rq-bookmark-btn:hover {
+    color: var(--warn);
+    border-color: var(--warn-border);
+    background: var(--warn-bg);
+  }
+  .rq-bookmark-btn.saved {
+    background: var(--warn-bg);
+    color: var(--warn);
+    border-color: var(--warn-border);
+  }
+
+  .rq-question-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  /* Options list in review */
+  .rq-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .rq-opt {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 16px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    font-size: 0.94rem;
+  }
+  .rq-opt.opt-correct {
+    background: var(--good-bg);
+    border-color: var(--good-border);
+    color: var(--good-dark);
+    font-weight: 600;
+  }
+  .rq-opt.opt-user-wrong {
+    background: var(--bad-bg);
+    border-color: var(--bad-border);
+    color: var(--bad-dark);
+    font-weight: 600;
+  }
+  .rq-opt-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .rq-letter {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 0.8rem;
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+  .rq-opt.opt-correct .rq-letter {
+    background: var(--good);
+    color: #ffffff;
+  }
+  .rq-opt.opt-user-wrong .rq-letter {
+    background: var(--bad);
+    color: #ffffff;
+  }
+
+  /* Deep Analysis Box */
+  .analysis-box {
+    background: #f8fafc;
+    border: 1px solid var(--blue-line);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .ab-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--blue);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ab-steps {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ab-step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.92rem;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .ab-step-num {
+    background: var(--blue-soft);
+    color: var(--blue);
+    font-weight: 700;
+    font-size: 0.75rem;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    flex: none;
+    margin-top: 2px;
+  }
+  .ab-insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .ab-card {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.86rem;
+    line-height: 1.45;
+  }
+  .ab-card.tip {
+    background: var(--good-bg);
+    border: 1px solid var(--good-border);
+    color: var(--good-dark);
+  }
+  .ab-card.pitfall {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    color: #92400e;
+  }
+  .ab-card b { display: block; margin-bottom: 2px; }
+
+  /* ===========================================================
+     ANALYTICS &amp; WEAK POINTS DASHBOARD VIEW (Objective 6 Active)
+     =========================================================== */
+  .analytics-header-card {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    color: #ffffff;
+    border-radius: var(--radius);
+    padding: 30px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+  }
+  .analytics-user-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .aur-left h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .aur-left p {
+    color: #cbd5e1;
+    font-size: 0.92rem;
+  }
+  .analytics-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 14px;
+  }
+  .am-card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .am-card b {
+    display: block;
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: #ffffff;
+  }
+  .am-card span {
+    font-size: 0.8rem;
+    color: #cbd5e1;
+    font-weight: 600;
+  }
+
+  /* Weak Points vs Strengths Container */
+  .focus-section {
+    margin-bottom: 30px;
+  }
+  .focus-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 18px;
+    margin-top: 14px;
+  }
+  .focus-box {
+    background: #ffffff;
+    border: 1.5px solid var(--blue-line);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow-sm);
+  }
+  .focus-box.weak-box {
+    border-top: 5px solid var(--bad);
+  }
+  .focus-box.strong-box {
+    border-top: 5px solid var(--good);
+  }
+  .fb-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .fb-head h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .topic-list-empty {
+    padding: 24px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    background: var(--bg);
+    border-radius: 8px;
+  }
+
+  .topic-stat-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    transition: background 0.15s;
+  }
+  .tsi-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .tsi-name {
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 0.92rem;
+  }
+  .tsi-pct {
+    font-weight: 800;
+    font-size: 0.92rem;
+  }
+  .tsi-pct.weak { color: var(--bad); }
+  .tsi-pct.good { color: var(--good); }
+  .tsi-bar {
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+  .tsi-bar-fill {
+    height: 100%;
+    border-radius: var(--radius-pill);
+  }
+  .tsi-bar-fill.weak { background: var(--bad); }
+  .tsi-bar-fill.good { background: var(--good); }
+  .tsi-advice {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* History Table */
+  .history-table-wrap {
+    background: #ffffff;
+    border: 1px solid var(--blue-line);
+    border-radius: var(--radius);
+    overflow-x: auto;
+    box-shadow: var(--shadow-sm);
+  }
+  table.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.9rem;
+  }
+  table.history-table th {
+    background: var(--blue-soft);
+    color: var(--navy);
+    font-weight: 700;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--blue-line);
+  }
+  table.history-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    color: var(--text);
+  }
+  table.history-table tr:last-child td { border-bottom: none; }
+  table.history-table tr:hover td { background: #f8fafc; }
+
+  /* ===========================================================
+     LOGIN &amp; PROFILE MODAL
+     =========================================================== */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(13,27,62,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+  }
+  .modal-box {
+    background: #ffffff;
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 440px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--blue-line);
+    overflow: hidden;
+    animation: modalIn 0.2s ease-out;
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .modal-head {
+    background: var(--navy);
+    color: #ffffff;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-head h3 { font-size: 1.2rem; font-weight: 700; }
+  .modal-close {
+    background: transparent;
+    color: #94a3b8;
+    font-size: 1.4rem;
+    line-height: 1;
+  }
+  .modal-close:hover { color: #ffffff; }
+
+  .modal-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--blue-line);
+    background: var(--bg);
+  }
+  .modal-tab-btn {
+    flex: 1;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--muted);
+    background: transparent;
+    transition: all 0.15s;
+  }
+  .modal-tab-btn.active {
+    color: var(--blue);
+    background: #ffffff;
+    border-bottom: 2.5px solid var(--blue);
+  }
+
+  .modal-body {
+    padding: 24px;
+  }
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .form-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .form-input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--blue-line);
+    outline: none;
+    transition: border-color 0.15s;
+    font-size: 0.92rem;
+  }
+  .form-input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+  }
+
+  /* Footer */
+  footer.page-footer {
+    padding: 36px 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.88rem;
+    border-top: 1px solid var(--blue-line);
+    background: #ffffff;
+    margin-top: 48px;
+  }
+
+  @media (max-width: 680px) {
+    header.bar .wrap { height: auto; padding: 12px 16px; flex-wrap: wrap; }
+    nav.main-nav { order: 3; width: 100%; justify-content: space-around; padding-top: 6px; border-top: 1px solid var(--blue-line); }
+    .hero-card { padding: 26px 18px; }
+    .test-panel { padding: 18px; }
+    .filter-bar { flex-direction: column; align-items: flex-start; }
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;!-- ===========================================================
+     STICKY NAVIGATION BAR
+     =========================================================== --&gt;
+&lt;header class=&quot;bar&quot;&gt;
+  &lt;div class=&quot;wrap&quot;&gt;
+    &lt;div class=&quot;brand-group&quot;&gt;
+      &lt;a href=&quot;#&quot; class=&quot;brand&quot; onclick=&quot;showView(&apos;home&apos;); return false;&quot; aria-label=&quot;Prepwise Home&quot;&gt;
+        &lt;div class=&quot;logo-box&quot;&gt;P&lt;/div&gt;
+        &lt;div&gt;
+          &lt;span&gt;Prepwise&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/a&gt;
+      &lt;span class=&quot;brand-tag&quot;&gt;Aptitude Analytics&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;nav class=&quot;main-nav&quot;&gt;
+      &lt;button class=&quot;nav-btn&quot; id=&quot;nav-categories&quot; onclick=&quot;handleNavClick(&apos;categories&apos;)&quot;&gt;Practice&lt;/button&gt;
+      &lt;button class=&quot;nav-btn&quot; id=&quot;nav-analytics&quot; onclick=&quot;showView(&apos;analytics&apos;)&quot;&gt;
+        Analytics &amp;amp; Weak Areas
+        &lt;span class=&quot;nav-badge hidden&quot; id=&quot;weakNavBadge&quot;&gt;0&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;nav-btn&quot; id=&quot;nav-bookmarks&quot; onclick=&quot;showView(&apos;bookmarks&apos;)&quot;&gt;
+        Bookmarks
+        &lt;span class=&quot;tag gray sm&quot; id=&quot;navBookmarkCount&quot; style=&quot;padding:1px 6px;font-size:0.7rem&quot;&gt;0&lt;/span&gt;
+      &lt;/button&gt;
+    &lt;/nav&gt;
+
+    &lt;div class=&quot;auth-nav&quot;&gt;
+      &lt;div id=&quot;authContainer&quot;&gt;
+        &lt;!-- Rendered dynamically: either Login button or User Profile badge --&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/header&gt;
+
+&lt;!-- ===========================================================
+     MAIN VIEW CONTAINER
+     =========================================================== --&gt;
+
+&lt;!-- 1. HOME VIEW --&gt;
+&lt;main id=&quot;view-home&quot;&gt;
+  &lt;div class=&quot;wrap&quot;&gt;
+    
+    &lt;!-- Hero Section (Strictly without individual student/guide names) --&gt;
+    &lt;div class=&quot;hero-card&quot;&gt;
+      &lt;div class=&quot;eyebrow&quot;&gt;Aptitude Practice &amp;amp; Assessment Platform&lt;/div&gt;
+      &lt;h1&gt;Smart, Timed Aptitude Practice with Deep Answer Analysis&lt;/h1&gt;
+      &lt;p class=&quot;lead&quot;&gt;
+        Prepare for campus placements and competitive examinations. Practice curated Quantitative, Logical, and Verbal topics under exam-style 5-minute sprints, uncover your exact weak spots automatically, and master problem-solving through step-by-step solutions.
+      &lt;/p&gt;
+
+      &lt;div class=&quot;hero-features&quot;&gt;
+        &lt;div class=&quot;hero-feat-chip&quot;&gt;&lt;span class=&quot;dot&quot;&gt;&lt;/span&gt; 3 Core Aptitude Disciplines&lt;/div&gt;
+        &lt;div class=&quot;hero-feat-chip&quot;&gt;&lt;span class=&quot;dot&quot;&gt;&lt;/span&gt; Step-by-Step Analytical Solutions&lt;/div&gt;
+        &lt;div class=&quot;hero-feat-chip&quot;&gt;&lt;span class=&quot;dot&quot;&gt;&lt;/span&gt; Real-Time Weak Area Detection&lt;/div&gt;
+        &lt;div class=&quot;hero-feat-chip&quot;&gt;&lt;span class=&quot;dot&quot;&gt;&lt;/span&gt; 5-Minute Timed Mock Tests&lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;hero-actions&quot;&gt;
+        &lt;button class=&quot;btn&quot; onclick=&quot;scrollToSection(&apos;categoriesSection&apos;)&quot;&gt;Start Practicing Now â†’&lt;/button&gt;
+        &lt;button class=&quot;btn ghost&quot; onclick=&quot;showView(&apos;analytics&apos;)&quot;&gt;View My Weak Topics&lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Personalized User Welcome Banner (Appears when user profile is loaded) --&gt;
+      &lt;div class=&quot;user-welcome-banner hidden&quot; id=&quot;userWelcomeBanner&quot;&gt;
+        &lt;div class=&quot;uw-left&quot;&gt;
+          &lt;h3 id=&quot;uwGreeting&quot;&gt;Welcome!&lt;/h3&gt;
+          &lt;p id=&quot;uwSummary&quot;&gt;Take a test to calibrate your aptitude baseline.&lt;/p&gt;
+          &lt;div class=&quot;uw-weak-chips&quot; id=&quot;uwWeakChips&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;button class=&quot;btn sm ghost&quot; onclick=&quot;showView(&apos;analytics&apos;)&quot;&gt;Detailed Report â†’&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Category Selection Section --&gt;
+    &lt;section class=&quot;block&quot; id=&quot;categoriesSection&quot; style=&quot;padding:40px 0 20px&quot;&gt;
+      &lt;div class=&quot;eyebrow&quot;&gt;01 Â· Choose Discipline&lt;/div&gt;
+      &lt;h2 class=&quot;section-title&quot;&gt;Practice by Category&lt;/h2&gt;
+      &lt;p class=&quot;section-sub&quot;&gt;
+        Choose a module below. Each timed test consists of 10 questions with a 5-minute category countdown clock. Upon completion, you get an immediate breakdown of your speed, accuracy, exact topic weaknesses, and step-by-step explanations.
+      &lt;/p&gt;
+      
+      &lt;div class=&quot;cat-grid&quot; id=&quot;categoryGrid&quot;&gt;
+        &lt;!-- Rendered by JavaScript --&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;!-- Diagnostic Value Banner --&gt;
+    &lt;div class=&quot;diag-banner&quot;&gt;
+      &lt;div&gt;
+        &lt;h3&gt;Automated Weak Area &amp;amp; Interest Tracking&lt;/h3&gt;
+        &lt;p&gt;Unlike standard quiz platforms, Prepwise maps every answer to subtopics like Blood Relations, Time &amp;amp; Work, and Subject-Verb Agreement. It flags where you lose marks so you can revise efficiently.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;button class=&quot;btn ghost&quot; style=&quot;background:#fff;border:none;color:var(--navy);flex:none&quot; onclick=&quot;showView(&apos;analytics&apos;)&quot;&gt;Open Analytics Hub&lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Objectives &amp; Workflow Overview --&gt;
+    &lt;section class=&quot;block&quot; id=&quot;objectivesSection&quot; style=&quot;padding:10px 0 40px&quot;&gt;
+      &lt;div class=&quot;eyebrow&quot;&gt;02 Â· Platform Architecture&lt;/div&gt;
+      &lt;h2 class=&quot;section-title&quot;&gt;How Prepwise Accelerates Your Preparation&lt;/h2&gt;
+      &lt;div class=&quot;obj-grid&quot;&gt;
+        &lt;div class=&quot;obj-item&quot;&gt;
+          &lt;div class=&quot;obj-num&quot;&gt;1&lt;/div&gt;
+          &lt;div class=&quot;obj-body&quot;&gt;
+            &lt;h4&gt;Structured Question Bank&lt;/h4&gt;
+            &lt;p&gt;Quantitative, Logical, and Verbal modules curated to mirror modern placement and competitive exam standards.&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;obj-item&quot;&gt;
+          &lt;div class=&quot;obj-num&quot;&gt;2&lt;/div&gt;
+          &lt;div class=&quot;obj-body&quot;&gt;
+            &lt;h4&gt;Timed 5-Minute Sprints&lt;/h4&gt;
+            &lt;p&gt;Builds exam temperament and speed with automated submission and time tracking per individual question.&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;obj-item&quot;&gt;
+          &lt;div class=&quot;obj-num&quot;&gt;3&lt;/div&gt;
+          &lt;div class=&quot;obj-body&quot;&gt;
+            &lt;h4&gt;Step-by-Step Answer Explanations&lt;/h4&gt;
+            &lt;p&gt;Clear mathematical proofs, speed formulas, common pitfalls, and conceptual rules for every question.&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;obj-item&quot;&gt;
+          &lt;div class=&quot;obj-num&quot;&gt;4&lt;/div&gt;
+          &lt;div class=&quot;obj-body&quot;&gt;
+            &lt;h4&gt;Persistent Weakness Profiling&lt;/h4&gt;
+            &lt;p&gt;Local state intelligence pinpoints the exact subtopics dragging your score down and advises concrete next steps.&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+  &lt;/div&gt;
+&lt;/main&gt;
+
+&lt;!-- 2. TEST VIEW --&gt;
+&lt;main id=&quot;view-test&quot; class=&quot;hidden&quot;&gt;
+  &lt;div class=&quot;wrap test-shell&quot;&gt;
+    &lt;div class=&quot;test-panel&quot;&gt;
+      
+      &lt;!-- Top header bar: Title, timer, action --&gt;
+      &lt;div class=&quot;test-head-row&quot;&gt;
+        &lt;div class=&quot;th-title-group&quot;&gt;
+          &lt;h2 id=&quot;testCategoryTitle&quot;&gt;Quantitative Aptitude&lt;/h2&gt;
+          &lt;div class=&quot;th-sub&quot;&gt;
+            &lt;span class=&quot;tag blue&quot; id=&quot;testTopicBadge&quot;&gt;Topic&lt;/span&gt;
+            &lt;span class=&quot;tag gray&quot; id=&quot;testDifficultyBadge&quot;&gt;Medium&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;timer-pill&quot; id=&quot;testTimer&quot; role=&quot;timer&quot; aria-live=&quot;polite&quot;&gt;
+          &lt;span&gt;â±&lt;/span&gt;
+          &lt;span id=&quot;testTimerDigits&quot;&gt;05:00&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Test Progress Bar --&gt;
+      &lt;div class=&quot;test-progress-bar&quot;&gt;
+        &lt;div class=&quot;test-progress-fill&quot; id=&quot;testProgressBar&quot; style=&quot;width: 10%;&quot;&gt;&lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Question Counter &amp; Meta Row --&gt;
+      &lt;div class=&quot;q-meta-row&quot;&gt;
+        &lt;div class=&quot;q-badge-group&quot;&gt;
+          &lt;span style=&quot;font-weight:700;color:var(--navy)&quot; id=&quot;testQIndexLabel&quot;&gt;Question 1 of 10&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;q-timer-badge&quot;&gt;
+          Time on this question: &lt;b id=&quot;testQTimeCounter&quot;&gt;0:00&lt;/b&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Question Text --&gt;
+      &lt;div class=&quot;q-text&quot; id=&quot;testQuestionText&quot;&gt;Loading question...&lt;/div&gt;
+
+      &lt;!-- Options --&gt;
+      &lt;div class=&quot;options-group&quot; id=&quot;testOptionsList&quot;&gt;
+        &lt;!-- Rendered by JS --&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Navigation &amp; Action Controls --&gt;
+      &lt;div class=&quot;test-footer-nav&quot;&gt;
+        &lt;div style=&quot;display:flex;gap:10px&quot;&gt;
+          &lt;button class=&quot;btn ghost&quot; id=&quot;testPrevBtn&quot; onclick=&quot;navigateQuestion(-1)&quot;&gt;â† Previous&lt;/button&gt;
+          &lt;button class=&quot;mark-btn&quot; id=&quot;testMarkBtn&quot; onclick=&quot;toggleMarkCurrentQuestion()&quot;&gt;
+            &lt;span&gt;âš&lt;/span&gt; Mark for Review
+          &lt;/button&gt;
+        &lt;/div&gt;
+
+        &lt;div style=&quot;display:flex;gap:10px&quot;&gt;
+          &lt;button class=&quot;btn ghost&quot; id=&quot;testNextBtn&quot; onclick=&quot;navigateQuestion(1)&quot;&gt;Next â†’&lt;/button&gt;
+          &lt;button class=&quot;btn&quot; style=&quot;background:var(--good-dark)&quot; onclick=&quot;confirmSubmitTest(false)&quot;&gt;Submit Test&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Question Palette --&gt;
+      &lt;div class=&quot;palette-wrap&quot;&gt;
+        &lt;div class=&quot;palette-legend&quot;&gt;
+          &lt;div class=&quot;pl-item&quot;&gt;&lt;span class=&quot;pl-dot cur&quot;&gt;&lt;/span&gt; Current&lt;/div&gt;
+          &lt;div class=&quot;pl-item&quot;&gt;&lt;span class=&quot;pl-dot ans&quot;&gt;&lt;/span&gt; Answered&lt;/div&gt;
+          &lt;div class=&quot;pl-item&quot;&gt;&lt;span class=&quot;pl-dot mrk&quot;&gt;&lt;/span&gt; Marked for Review&lt;/div&gt;
+          &lt;div class=&quot;pl-item&quot;&gt;&lt;span class=&quot;pl-dot unt&quot;&gt;&lt;/span&gt; Not Attempted&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;palette-grid&quot; id=&quot;testPaletteGrid&quot;&gt;
+          &lt;!-- Rendered by JS --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/main&gt;
+
+&lt;!-- 3. RESULT VIEW --&gt;
+&lt;main id=&quot;view-result&quot; class=&quot;hidden&quot;&gt;
+  &lt;div class=&quot;wrap&quot; style=&quot;padding-top:28px;padding-bottom:48px&quot;&gt;
+    &lt;div class=&quot;result-panel&quot;&gt;
+      &lt;div class=&quot;eyebrow&quot;&gt;Assessment Complete&lt;/div&gt;
+      &lt;h2 class=&quot;section-title&quot; id=&quot;resultCategoryTitle&quot;&gt;Test Results&lt;/h2&gt;
+      
+      &lt;!-- Score Ring --&gt;
+      &lt;div class=&quot;score-conic-ring&quot; id=&quot;resultScoreRing&quot;&gt;
+        &lt;div class=&quot;score-conic-ring-inner&quot;&gt;
+          &lt;b id=&quot;resultScoreScore&quot;&gt;0/10&lt;/b&gt;
+          &lt;span id=&quot;resultScorePct&quot;&gt;0% Accuracy&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;p class=&quot;section-sub&quot; id=&quot;resultMessage&quot; style=&quot;margin:0 auto 12px;max-width:600px;font-size:1.05rem&quot;&gt;
+        Review your mistakes to turn your weak spots into strengths.
+      &lt;/p&gt;
+
+      &lt;!-- Key Metrics --&gt;
+      &lt;div class=&quot;stats-grid&quot;&gt;
+        &lt;div class=&quot;stat-box good&quot;&gt;
+          &lt;b id=&quot;resCorrectCount&quot;&gt;0&lt;/b&gt;
+          &lt;span&gt;Correct&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;stat-box bad&quot;&gt;
+          &lt;b id=&quot;resIncorrectCount&quot;&gt;0&lt;/b&gt;
+          &lt;span&gt;Incorrect&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;stat-box warn&quot;&gt;
+          &lt;b id=&quot;resSkippedCount&quot;&gt;0&lt;/b&gt;
+          &lt;span&gt;Unanswered&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;stat-box&quot;&gt;
+          &lt;b id=&quot;resTimeTaken&quot;&gt;0:00&lt;/b&gt;
+          &lt;span&gt;Total Time&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;stat-box&quot;&gt;
+          &lt;b id=&quot;resAvgTime&quot;&gt;0s&lt;/b&gt;
+          &lt;span&gt;Avg per Question&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Immediate Diagnostic Feedback Card --&gt;
+      &lt;div class=&quot;res-diagnostic-card&quot;&gt;
+        &lt;div class=&quot;rd-header&quot;&gt;
+          &lt;span&gt;ðŸŽ¯&lt;/span&gt; Test Diagnostic Insights
+        &lt;/div&gt;
+        &lt;div id=&quot;resDiagnosticList&quot;&gt;
+          &lt;!-- Dynamically populated with identified weak topics and strong topics from this specific run --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Actions --&gt;
+      &lt;div style=&quot;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px&quot;&gt;
+        &lt;button class=&quot;btn&quot; onclick=&quot;openDetailedReview(&apos;all&apos;)&quot;&gt;
+          &lt;span&gt;ðŸ”&lt;/span&gt; Detailed Answer-by-Answer Review
+        &lt;/button&gt;
+        &lt;button class=&quot;btn ghost&quot; onclick=&quot;showView(&apos;analytics&apos;)&quot;&gt;
+          &lt;span&gt;ðŸ“Š&lt;/span&gt; View All Weak Areas in Analytics
+        &lt;/button&gt;
+        &lt;button class=&quot;btn ghost&quot; onclick=&quot;restartCurrentTest()&quot;&gt;
+          &lt;span&gt;â†º&lt;/span&gt; Retry Test
+        &lt;/button&gt;
+        &lt;button class=&quot;btn ghost&quot; onclick=&quot;showView(&apos;home&apos;)&quot;&gt;
+          Home
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/main&gt;
+
+&lt;!-- 4. DETAILED ANSWER-BY-ANSWER REVIEW VIEW (Core Requirement) --&gt;
+&lt;main id=&quot;view-review&quot; class=&quot;hidden&quot;&gt;
+  &lt;div class=&quot;wrap&quot; style=&quot;padding-top:28px;padding-bottom:48px&quot;&gt;
+    
+    &lt;!-- Review Filter &amp; Summary Header --&gt;
+    &lt;div class=&quot;review-header-card&quot;&gt;
+      &lt;div style=&quot;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px&quot;&gt;
+        &lt;div&gt;
+          &lt;div class=&quot;eyebrow&quot;&gt;Answer-by-Answer Analysis&lt;/div&gt;
+          &lt;h2 class=&quot;section-title&quot; id=&quot;reviewTitle&quot; style=&quot;font-size:1.6rem&quot;&gt;Review Â· Quantitative Aptitude&lt;/h2&gt;
+          &lt;p class=&quot;section-sub&quot; style=&quot;margin-bottom:0&quot;&gt;
+            Study each question&apos;s step-by-step logic, speed shortcuts, and common pitfalls to ensure you never make the same mistake twice.
+          &lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;display:flex;gap:10px&quot;&gt;
+          &lt;button class=&quot;btn sm ghost&quot; onclick=&quot;showView(&apos;result&apos;)&quot;&gt;â† Back to Score&lt;/button&gt;
+          &lt;button class=&quot;btn sm ghost&quot; onclick=&quot;showView(&apos;home&apos;)&quot;&gt;Home&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Filters --&gt;
+      &lt;div class=&quot;filter-bar&quot;&gt;
+        &lt;div class=&quot;filter-btns&quot;&gt;
+          &lt;button class=&quot;filter-btn active&quot; data-filter=&quot;all&quot; onclick=&quot;setReviewFilter(&apos;all&apos;)&quot;&gt;All Questions (&lt;span id=&quot;countRevAll&quot;&gt;0&lt;/span&gt;)&lt;/button&gt;
+          &lt;button class=&quot;filter-btn&quot; data-filter=&quot;wrong&quot; onclick=&quot;setReviewFilter(&apos;wrong&apos;)&quot;&gt;Incorrect Only (&lt;span id=&quot;countRevWrong&quot;&gt;0&lt;/span&gt;)&lt;/button&gt;
+          &lt;button class=&quot;filter-btn&quot; data-filter=&quot;skipped&quot; onclick=&quot;setReviewFilter(&apos;skipped&apos;)&quot;&gt;Unanswered (&lt;span id=&quot;countRevSkipped&quot;&gt;0&lt;/span&gt;)&lt;/button&gt;
+          &lt;button class=&quot;filter-btn&quot; data-filter=&quot;correct&quot; onclick=&quot;setReviewFilter(&apos;correct&apos;)&quot;&gt;Correct Only (&lt;span id=&quot;countRevCorrect&quot;&gt;0&lt;/span&gt;)&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;display:flex;align-items:center;gap:8px&quot;&gt;
+          &lt;label for=&quot;reviewTopicFilter&quot; style=&quot;font-size:0.84rem;font-weight:600;color:var(--muted)&quot;&gt;Topic:&lt;/label&gt;
+          &lt;select id=&quot;reviewTopicFilter&quot; onchange=&quot;applyReviewTopicFilter(this.value)&quot; class=&quot;form-input&quot; style=&quot;padding:4px 8px;font-size:0.84rem;width:auto&quot;&gt;
+            &lt;option value=&quot;all&quot;&gt;All Subtopics&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Review Questions Container --&gt;
+    &lt;div id=&quot;reviewQuestionsList&quot;&gt;
+      &lt;!-- Populated dynamically with rich step-by-step solutions --&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+&lt;/main&gt;
+
+&lt;!-- 5. ANALYTICS &amp; WEAK POINTS DASHBOARD VIEW (Objective 6 Activated) --&gt;
+&lt;main id=&quot;view-analytics&quot; class=&quot;hidden&quot;&gt;
+  &lt;div class=&quot;wrap&quot; style=&quot;padding-top:28px;padding-bottom:48px&quot;&gt;
+    
+    &lt;!-- Header Banner --&gt;
+    &lt;div class=&quot;analytics-header-card&quot;&gt;
+      &lt;div class=&quot;analytics-user-row&quot;&gt;
+        &lt;div class=&quot;aur-left&quot;&gt;
+          &lt;h2 id=&quot;analyticsUserGreeting&quot;&gt;Your Performance &amp;amp; Weakness Analytics&lt;/h2&gt;
+          &lt;p id=&quot;analyticsUserTarget&quot;&gt;Target Goal: General Aptitude &amp;amp; Placement Drives&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;button class=&quot;btn sm ghost&quot; style=&quot;background:#fff;border:none;color:var(--navy)&quot; onclick=&quot;openGoalEditorModal()&quot;&gt;
+            Edit Target Goal &amp;amp; Interests
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Lifetime Metrics --&gt;
+      &lt;div class=&quot;analytics-metrics-grid&quot;&gt;
+        &lt;div class=&quot;am-card&quot;&gt;
+          &lt;b id=&quot;anaTestsCount&quot;&gt;0&lt;/b&gt;
+          &lt;span&gt;Tests Completed&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;am-card&quot;&gt;
+          &lt;b id=&quot;anaQuestionsCount&quot;&gt;0&lt;/b&gt;
+          &lt;span&gt;Questions Solved&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;am-card&quot;&gt;
+          &lt;b id=&quot;anaAccuracyPct&quot;&gt;0%&lt;/b&gt;
+          &lt;span&gt;Overall Accuracy&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;am-card&quot;&gt;
+          &lt;b id=&quot;anaWeakCount&quot;&gt;0&lt;/b&gt;
+          &lt;span&gt;Active Weak Spots&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Weak Areas vs Strong Areas Breakdown --&gt;
+    &lt;div class=&quot;focus-section&quot;&gt;
+      &lt;div class=&quot;focus-cards-grid&quot;&gt;
+        
+        &lt;!-- Weak Areas Card --&gt;
+        &lt;div class=&quot;focus-box weak-box&quot;&gt;
+          &lt;div class=&quot;fb-head&quot;&gt;
+            &lt;h3&gt;âš ï¸ Exact Weak Points (&lt;span id=&quot;weakAreaCountLabel&quot;&gt;0&lt;/span&gt;)&lt;/h3&gt;
+            &lt;span class=&quot;tag red&quot;&gt;Needs Revision&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;p style=&quot;font-size:0.86rem;color:var(--muted);margin-bottom:14px&quot;&gt;
+            Topics where your accuracy is below 60%. Prioritize these areas to maximize placement scores.
+          &lt;/p&gt;
+          &lt;div id=&quot;weakTopicsList&quot;&gt;
+            &lt;!-- Dynamically populated --&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- Strong &amp; Interested Topics Card --&gt;
+        &lt;div class=&quot;focus-box strong-box&quot;&gt;
+          &lt;div class=&quot;fb-head&quot;&gt;
+            &lt;h3&gt;â­ Strengths &amp;amp; High-Interest Topics&lt;/h3&gt;
+            &lt;span class=&quot;tag green&quot;&gt;Well Prepared&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;p style=&quot;font-size:0.86rem;color:var(--muted);margin-bottom:14px&quot;&gt;
+            Topics where your accuracy exceeds 75%, along with your declared interest areas.
+          &lt;/p&gt;
+          &lt;div id=&quot;strongTopicsList&quot;&gt;
+            &lt;!-- Dynamically populated --&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Complete Topic-by-Topic Mastery Breakdown --&gt;
+    &lt;div class=&quot;review-header-card&quot; style=&quot;margin-top:24px&quot;&gt;
+      &lt;h3 style=&quot;font-size:1.25rem;color:var(--navy);font-weight:700;margin-bottom:4px&quot;&gt;
+        Topic-by-Topic Mastery Matrix
+      &lt;/h3&gt;
+      &lt;p style=&quot;color:var(--muted);font-size:0.9rem;margin-bottom:18px&quot;&gt;
+        Real-time breakdown of all aptitude subtopics based on your practice history.
+      &lt;/p&gt;
+
+      &lt;div id=&quot;fullTopicMatrixList&quot; style=&quot;display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:14px&quot;&gt;
+        &lt;!-- Dynamically rendered --&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Historical Test Log Table --&gt;
+    &lt;div style=&quot;margin-top:32px&quot;&gt;
+      &lt;div style=&quot;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px&quot;&gt;
+        &lt;h3 style=&quot;font-size:1.2rem;color:var(--navy);font-weight:700&quot;&gt;Test History &amp;amp; Score Logs&lt;/h3&gt;
+        &lt;button class=&quot;btn sm danger&quot; onclick=&quot;confirmClearHistory()&quot;&gt;Clear Test History&lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;history-table-wrap&quot;&gt;
+        &lt;table class=&quot;history-table&quot;&gt;
+          &lt;thead&gt;
+            &lt;tr&gt;
+              &lt;th&gt;Date &amp;amp; Time&lt;/th&gt;
+              &lt;th&gt;Category&lt;/th&gt;
+              &lt;th&gt;Score&lt;/th&gt;
+              &lt;th&gt;Accuracy&lt;/th&gt;
+              &lt;th&gt;Time Taken&lt;/th&gt;
+              &lt;th&gt;Identified Weak Spots&lt;/th&gt;
+            &lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody id=&quot;historyTableBody&quot;&gt;
+            &lt;!-- Rendered by JS --&gt;
+          &lt;/tbody&gt;
+        &lt;/table&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+&lt;/main&gt;
+
+&lt;!-- 6. BOOKMARKS VIEW --&gt;
+&lt;main id=&quot;view-bookmarks&quot; class=&quot;hidden&quot;&gt;
+  &lt;div class=&quot;wrap&quot; style=&quot;padding-top:28px;padding-bottom:48px&quot;&gt;
+    &lt;div class=&quot;review-header-card&quot;&gt;
+      &lt;div style=&quot;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px&quot;&gt;
+        &lt;div&gt;
+          &lt;div class=&quot;eyebrow&quot;&gt;Personal Revision Notebook&lt;/div&gt;
+          &lt;h2 class=&quot;section-title&quot; style=&quot;font-size:1.6rem&quot;&gt;Bookmarked Questions&lt;/h2&gt;
+          &lt;p class=&quot;section-sub&quot; style=&quot;margin-bottom:0&quot;&gt;
+            Tricky or important questions you&apos;ve saved during reviews for fast last-minute revision.
+          &lt;/p&gt;
+        &lt;/div&gt;
+        &lt;button class=&quot;btn sm ghost&quot; onclick=&quot;showView(&apos;home&apos;)&quot;&gt;Home&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;bookmarksList&quot;&gt;
+      &lt;!-- Dynamically populated --&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/main&gt;
+
+&lt;!-- ===========================================================
+     LOGIN &amp; REGISTRATION MODAL
+     =========================================================== --&gt;
+&lt;div class=&quot;modal-overlay hidden&quot; id=&quot;authModal&quot;&gt;
+  &lt;div class=&quot;modal-box&quot;&gt;
+    &lt;div class=&quot;modal-head&quot;&gt;
+      &lt;h3 id=&quot;modalTitle&quot;&gt;Student Login&lt;/h3&gt;
+      &lt;button class=&quot;modal-close&quot; onclick=&quot;closeAuthModal()&quot; aria-label=&quot;Close&quot;&gt;Ã—&lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;modal-tabs&quot;&gt;
+      &lt;button class=&quot;modal-tab-btn active&quot; id=&quot;tabBtnLogin&quot; onclick=&quot;switchAuthTab(&apos;login&apos;)&quot;&gt;Sign In&lt;/button&gt;
+      &lt;button class=&quot;modal-tab-btn&quot; id=&quot;tabBtnRegister&quot; onclick=&quot;switchAuthTab(&apos;register&apos;)&quot;&gt;Create Account&lt;/button&gt;
+      &lt;button class=&quot;modal-tab-btn&quot; id=&quot;tabBtnGuest&quot; onclick=&quot;switchAuthTab(&apos;guest&apos;)&quot;&gt;Quick Guest&lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Login Tab --&gt;
+    &lt;div class=&quot;modal-body&quot; id=&quot;authTabLogin&quot;&gt;
+      &lt;form onsubmit=&quot;handleLoginSubmit(event)&quot;&gt;
+        &lt;div class=&quot;form-group&quot;&gt;
+          &lt;label class=&quot;form-label&quot; for=&quot;loginEmail&quot;&gt;Email Address&lt;/label&gt;
+          &lt;input type=&quot;email&quot; id=&quot;loginEmail&quot; class=&quot;form-input&quot; placeholder=&quot;e.g. abhi@prepwise.com&quot; required&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;form-group&quot;&gt;
+          &lt;label class=&quot;form-label&quot; for=&quot;loginPass&quot;&gt;Password&lt;/label&gt;
+          &lt;input type=&quot;password&quot; id=&quot;loginPass&quot; class=&quot;form-input&quot; placeholder=&quot;â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢&quot; required&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;margin-top:20px&quot;&gt;
+          &lt;button type=&quot;submit&quot; class=&quot;btn&quot; style=&quot;width:100%&quot;&gt;Sign In &amp;amp; Load My Data&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;text-align:center;font-size:0.84rem;color:var(--muted);margin-top:14px&quot;&gt;
+          Don&apos;t have an account yet? &lt;a href=&quot;#&quot; onclick=&quot;switchAuthTab(&apos;register&apos;);return false;&quot; style=&quot;color:var(--blue);font-weight:600&quot;&gt;Register here&lt;/a&gt;
+        &lt;/p&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Register Tab --&gt;
+    &lt;div class=&quot;modal-body hidden&quot; id=&quot;authTabRegister&quot;&gt;
+      &lt;form onsubmit=&quot;handleRegisterSubmit(event)&quot;&gt;
+        &lt;div class=&quot;form-group&quot;&gt;
+          &lt;label class=&quot;form-label&quot; for=&quot;regName&quot;&gt;Full Name&lt;/label&gt;
+          &lt;input type=&quot;text&quot; id=&quot;regName&quot; class=&quot;form-input&quot; placeholder=&quot;e.g. Abhishek Kumar&quot; required&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;form-group&quot;&gt;
+          &lt;label class=&quot;form-label&quot; for=&quot;regEmail&quot;&gt;Email Address&lt;/label&gt;
+          &lt;input type=&quot;email&quot; id=&quot;regEmail&quot; class=&quot;form-input&quot; placeholder=&quot;e.g. abhi@student.edu&quot; required&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;form-group&quot;&gt;
+          &lt;label class=&quot;form-label&quot; for=&quot;regGoal&quot;&gt;Target Exam / Career Track&lt;/label&gt;
+          &lt;select id=&quot;regGoal&quot; class=&quot;form-input&quot;&gt;
+            &lt;option value=&quot;Campus Placements (TCS, Infosys, Wipro)&quot;&gt;Campus Placements (IT / Product)&lt;/option&gt;
+            &lt;option value=&quot;Core Engineering Placements&quot;&gt;Core Engineering Placements&lt;/option&gt;
+            &lt;option value=&quot;Banking &amp; SSC Exams&quot;&gt;Banking (IBPS, SBI PO) &amp;amp; SSC&lt;/option&gt;
+            &lt;option value=&quot;Management Entrance (CAT, XAT)&quot;&gt;Management Entrance (CAT, XAT)&lt;/option&gt;
+            &lt;option value=&quot;General Aptitude Practice&quot;&gt;General Aptitude Improvement&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;form-group&quot;&gt;
+          &lt;label class=&quot;form-label&quot; for=&quot;regPass&quot;&gt;Create Password&lt;/label&gt;
+          &lt;input type=&quot;password&quot; id=&quot;regPass&quot; class=&quot;form-input&quot; placeholder=&quot;At least 6 characters&quot; minlength=&quot;4&quot; required&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;margin-top:20px&quot;&gt;
+          &lt;button type=&quot;submit&quot; class=&quot;btn&quot; style=&quot;width:100%&quot;&gt;Create Account &amp;amp; Start&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Quick Guest Tab --&gt;
+    &lt;div class=&quot;modal-body hidden&quot; id=&quot;authTabGuest&quot;&gt;
+      &lt;p style=&quot;font-size:0.92rem;color:var(--muted);margin-bottom:18px&quot;&gt;
+        Want to try Prepwise immediately without a password? Use guest mode. Your test history and weak area diagnostics will still be saved locally on this browser.
+      &lt;/p&gt;
+      &lt;div class=&quot;form-group&quot;&gt;
+        &lt;label class=&quot;form-label&quot; for=&quot;guestName&quot;&gt;Your Display Name&lt;/label&gt;
+        &lt;input type=&quot;text&quot; id=&quot;guestName&quot; class=&quot;form-input&quot; value=&quot;Aptitude Aspirant&quot; required&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;margin-top:20px&quot;&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn&quot; style=&quot;width:100%&quot; onclick=&quot;handleGuestSubmit()&quot;&gt;Continue in Guest Mode&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- ===========================================================
+     TARGET GOAL &amp; INTERESTS EDITOR MODAL
+     =========================================================== --&gt;
+&lt;div class=&quot;modal-overlay hidden&quot; id=&quot;goalModal&quot;&gt;
+  &lt;div class=&quot;modal-box&quot;&gt;
+    &lt;div class=&quot;modal-head&quot;&gt;
+      &lt;h3&gt;Target Goal &amp;amp; Interest Topics&lt;/h3&gt;
+      &lt;button class=&quot;modal-close&quot; onclick=&quot;closeGoalModal()&quot; aria-label=&quot;Close&quot;&gt;Ã—&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;modal-body&quot;&gt;
+      &lt;div class=&quot;form-group&quot;&gt;
+        &lt;label class=&quot;form-label&quot; for=&quot;goalSelect&quot;&gt;Your Target Examination / Goal&lt;/label&gt;
+        &lt;select id=&quot;goalSelect&quot; class=&quot;form-input&quot;&gt;
+          &lt;option value=&quot;Campus Placements (TCS, Infosys, Wipro)&quot;&gt;Campus Placements (IT / Product)&lt;/option&gt;
+          &lt;option value=&quot;Core Engineering Placements&quot;&gt;Core Engineering Placements&lt;/option&gt;
+          &lt;option value=&quot;Banking &amp; SSC Exams&quot;&gt;Banking (IBPS, SBI PO) &amp;amp; SSC&lt;/option&gt;
+          &lt;option value=&quot;Management Entrance (CAT, XAT)&quot;&gt;Management Entrance (CAT, XAT)&lt;/option&gt;
+          &lt;option value=&quot;General Aptitude Practice&quot;&gt;General Aptitude Improvement&lt;/option&gt;
+        &lt;/select&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;form-group&quot;&gt;
+        &lt;label class=&quot;form-label&quot;&gt;Topics of Special Interest to You&lt;/label&gt;
+        &lt;div style=&quot;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.86rem;margin-top:8px&quot; id=&quot;interestCheckboxes&quot;&gt;
+          &lt;!-- Populated by JS --&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div style=&quot;margin-top:20px;display:flex;gap:10px;justify-content:flex-end&quot;&gt;
+        &lt;button class=&quot;btn ghost&quot; onclick=&quot;closeGoalModal()&quot;&gt;Cancel&lt;/button&gt;
+        &lt;button class=&quot;btn&quot; onclick=&quot;saveUserGoalsAndInterests()&quot;&gt;Save Changes&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- ===========================================================
+     PAGE FOOTER
+     =========================================================== --&gt;
+&lt;footer class=&quot;page-footer&quot;&gt;
+  &lt;div class=&quot;wrap&quot;&gt;
+    &lt;div style=&quot;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px&quot;&gt;
+      &lt;div class=&quot;logo-box&quot; style=&quot;width:24px;height:24px;font-size:0.8rem&quot;&gt;P&lt;/div&gt;
+      &lt;b style=&quot;color:var(--navy)&quot;&gt;Prepwise&lt;/b&gt; â€” Web-Based Aptitude Practice &amp;amp; Diagnostic Assessment
+    &lt;/div&gt;
+    &lt;p&gt;Empowering students with timed practice, automated topic weakness profiling, and deep step-by-step solutions.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/footer&gt;
+
+&lt;!-- ===========================================================
+     COMPREHENSIVE JAVASCRIPT APPLICATION CORE
+     1. Rich Question Bank with Step-by-Step Proofs &amp; Pitfalls
+     2. Persistent Auth &amp; User Profiles (localStorage)
+     3. Exact Weak Points &amp; Topic Mastery Engine
+     4. 5-Minute Timed Test Engine &amp; Per-Question Time Tracking
+     5. Detailed Review &amp; Bookmarking System
+     =========================================================== --&gt;
+&lt;script&gt;
+/* ===========================================================
+   1. QUESTION BANK WITH DEEP ANALYTICAL SOLUTIONS
+   Each question contains:
+     - q: Question text
+     - topic: Subtopic identifier
+     - difficulty: Easy / Medium / Hard
+     - o: Options array [A, B, C, D]
+     - a: Correct option index (0..3)
+     - explanation:
+       - summary: Conceptual core
+       - formula: Key formula applied
+       - steps: Array of step strings
+       - speed_tip: Shortcut mental trick
+       - common_pitfall: Why students get it wrong
+   =========================================================== */
+const QUESTION_BANK = {
+  quantitative: {
+    letter: &quot;Q&quot;,
+    name: &quot;Quantitative Aptitude&quot;,
+    desc: &quot;Percentages, profit &amp; loss, speed-distance-time, ratios, simple interest, and work-time equations.&quot;,
+    questions: [
+      {
+        id: &quot;q_1&quot;,
+        q: &quot;What is 20% of 250?&quot;,
+        topic: &quot;Percentages&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;40&quot;, &quot;50&quot;, &quot;60&quot;, &quot;25&quot;],
+        a: 1,
+        explanation: {
+          summary: &quot;Percentages represent parts per hundred.&quot;,
+          formula: &quot;Value = (P / 100) Ã— Base&quot;,
+          steps: [
+            &quot;Convert 20% to its decimal or fraction form: 20/100 = 1/5.&quot;,
+            &quot;Multiply the fraction by the total base value: (1/5) Ã— 250.&quot;,
+            &quot;250 Ã· 5 = 50.&quot;
+          ],
+          speed_tip: &quot;To find 20% quickly in your head, first find 10% by shifting the decimal one spot left (25), then double it: 25 Ã— 2 = 50.&quot;,
+          common_pitfall: &quot;Confusing 20% with 25%, which would yield 62.5 instead of 50.&quot;
+        }
+      },
+      {
+        id: &quot;q_2&quot;,
+        q: &quot;A train travels 150 km at an average speed of 60 km/h. How long does the journey take?&quot;,
+        topic: &quot;Speed, Time &amp; Distance&quot;,
+        difficulty: &quot;Medium&quot;,
+        o: [&quot;2 hours&quot;, &quot;2.5 hours&quot;, &quot;3 hours&quot;, &quot;1.5 hours&quot;],
+        a: 1,
+        explanation: {
+          summary: &quot;Time taken is directly proportional to distance and inversely proportional to speed.&quot;,
+          formula: &quot;Time = Distance Ã· Speed&quot;,
+          steps: [
+            &quot;Given: Distance = 150 km, Speed = 60 km/h.&quot;,
+            &quot;Apply formula: Time = 150 / 60.&quot;,
+            &quot;Simplify: 150 / 60 = 15 / 6 = 5 / 2 = 2.5 hours (or 2 hours 30 minutes).&quot;
+          ],
+          speed_tip: &quot;Think: 60 km in 1 hr, 120 km in 2 hrs. The remaining 30 km is exactly half of 60 km (30 mins = 0.5 hr). Total = 2.5 hrs.&quot;,
+          common_pitfall: &quot;Writing 2.5 hours as 2 hours 50 minutes instead of 2 hours 30 minutes.&quot;
+        }
+      },
+      {
+        id: &quot;q_3&quot;,
+        q: &quot;What is the arithmetic mean (average) of 10, 20, 30, 40, and 50?&quot;,
+        topic: &quot;Averages&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;25&quot;, &quot;30&quot;, &quot;35&quot;, &quot;40&quot;],
+        a: 1,
+        explanation: {
+          summary: &quot;The average of an evenly spaced arithmetic sequence is simply the middle term.&quot;,
+          formula: &quot;Average = (Sum of all terms) Ã· (Number of terms)&quot;,
+          steps: [
+            &quot;Calculate total sum: 10 + 20 + 30 + 40 + 50 = 150.&quot;,
+            &quot;Count total elements: N = 5.&quot;,
+            &quot;Divide sum by count: 150 Ã· 5 = 30.&quot;
+          ],
+          speed_tip: &quot;For any symmetric or consecutive sequence with an odd count of numbers, the average is always the exact median (middle) element (30).&quot;,
+          common_pitfall: &quot;Miscounting the number of terms or introducing an addition error during rapid calculations.&quot;
+        }
+      },
+      {
+        id: &quot;q_4&quot;,
+        q: &quot;An article bought for â‚¹400 is sold for â‚¹500. What is the profit percentage?&quot;,
+        topic: &quot;Profit &amp; Loss&quot;,
+        difficulty: &quot;Medium&quot;,
+        o: [&quot;20%&quot;, &quot;25%&quot;, &quot;30%&quot;, &quot;15%&quot;],
+        a: 1,
+        explanation: {
+          summary: &quot;Profit percentage is always computed on the Cost Price (CP), not the Selling Price (SP).&quot;,
+          formula: &quot;Profit % = [(SP âˆ’ CP) / CP] Ã— 100&quot;,
+          steps: [
+            &quot;Cost Price (CP) = â‚¹400, Selling Price (SP) = â‚¹500.&quot;,
+            &quot;Absolute Profit = SP âˆ’ CP = 500 âˆ’ 400 = â‚¹100.&quot;,
+            &quot;Profit % = (100 / 400) Ã— 100 = (1/4) Ã— 100 = 25%.&quot;
+          ],
+          speed_tip: &quot;Recognize that 100 is 1/4th of 400. 1/4 in percentage is directly 25%.&quot;,
+          common_pitfall: &quot;Dividing the profit by the selling price (100 / 500 = 20%), which calculates profit margin on revenue rather than profit percentage on cost.&quot;
+        }
+      },
+      {
+        id: &quot;q_5&quot;,
+        q: &quot;Calculate the Simple Interest on â‚¹5,000 at 8% per annum for 2 years:&quot;,
+        topic: &quot;Simple Interest&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;â‚¹600&quot;, &quot;â‚¹700&quot;, &quot;â‚¹800&quot;, &quot;â‚¹900&quot;],
+        a: 2,
+        explanation: {
+          summary: &quot;In simple interest, the principal remains constant across all years.&quot;,
+          formula: &quot;SI = (Principal Ã— Rate Ã— Time) / 100&quot;,
+          steps: [
+            &quot;Identify parameters: P = â‚¹5000, R = 8%, T = 2 years.&quot;,
+            &quot;Substitute into formula: SI = (5000 Ã— 8 Ã— 2) / 100.&quot;,
+            &quot;Simplify: 50 Ã— 16 = â‚¹800.&quot;
+          ],
+          speed_tip: &quot;8% for 2 years is equivalent to a single 16% interest on â‚¹5000. 10% of 5000 is 500, 5% is 250, 1% is 50. Total = 500 + 250 + 50 = â‚¹800.&quot;,
+          common_pitfall: &quot;Accidentally calculating compound interest: 5000 Ã— (1.08)Â² - 5000 = â‚¹832.&quot;
+        }
+      },
+      {
+        id: &quot;q_6&quot;,
+        q: &quot;Two numbers are in the ratio 3 : 5 and their sum is 64. What is the value of the larger number?&quot;,
+        topic: &quot;Ratio &amp; Proportion&quot;,
+        difficulty: &quot;Medium&quot;,
+        o: [&quot;24&quot;, &quot;32&quot;, &quot;40&quot;, &quot;48&quot;],
+        a: 2,
+        explanation: {
+          summary: &quot;Partition the total sum according to the ratio units.&quot;,
+          formula: &quot;Value of share = (Ratio part / Sum of ratio parts) Ã— Total&quot;,
+          steps: [
+            &quot;Total parts = 3 + 5 = 8 parts.&quot;,
+            &quot;Value of 1 part = 64 Ã· 8 = 8.&quot;,
+            &quot;Smaller number = 3 Ã— 8 = 24.&quot;,
+            &quot;Larger number = 5 Ã— 8 = 40.&quot;
+          ],
+          speed_tip: &quot;The larger number corresponds to 5 parts, so it must be a multiple of 5. Among options 24, 32, 40, and 48, only 40 is divisible by 5!&quot;,
+          common_pitfall: &quot;Calculating the smaller number (24) and selecting it in haste.&quot;
+        }
+      },
+      {
+        id: &quot;q_7&quot;,
+        q: &quot;If x + 15 = 2x âˆ’ 5, what is the value of x?&quot;,
+        topic: &quot;Algebra &amp; Linear Equations&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;10&quot;, &quot;15&quot;, &quot;20&quot;, &quot;25&quot;],
+        a: 2,
+        explanation: {
+          summary: &quot;Isolate variables on one side and numerical constants on the other.&quot;,
+          formula: &quot;Balance equations by inverse operations&quot;,
+          steps: [
+            &quot;Given equation: x + 15 = 2x âˆ’ 5.&quot;,
+            &quot;Subtract x from both sides: 15 = 2x âˆ’ x âˆ’ 5 =&gt; 15 = x âˆ’ 5.&quot;,
+            &quot;Add 5 to both sides: 15 + 5 = x =&gt; x = 20.&quot;
+          ],
+          speed_tip: &quot;Plug in the options: If x = 20: LHS = 20 + 15 = 35; RHS = 2(20) - 5 = 35. Matches instantly.&quot;,
+          common_pitfall: &quot;Sign errors when transposing (-5 becoming -15 instead of +5).&quot;
+        }
+      },
+      {
+        id: &quot;q_8&quot;,
+        q: &quot;Worker A completes a task in 10 days, while Worker B completes it in 15 days. Working together, how many days will they take?&quot;,
+        topic: &quot;Time &amp; Work&quot;,
+        difficulty: &quot;Hard&quot;,
+        o: [&quot;5 days&quot;, &quot;6 days&quot;, &quot;7 days&quot;, &quot;8 days&quot;],
+        a: 1,
+        explanation: {
+          summary: &quot;Work efficiency is additive: Total days = Product Ã· Sum.&quot;,
+          formula: &quot;Time = (A Ã— B) / (A + B)&quot;,
+          steps: [
+            &quot;A&apos;s 1-day work rate = 1/10.&quot;,
+            &quot;B&apos;s 1-day work rate = 1/15.&quot;,
+            &quot;Combined 1-day rate = (1/10) + (1/15) = (3 + 2) / 30 = 5/30 = 1/6.&quot;,
+            &quot;Total days required = Reciprocal of 1/6 = 6 days.&quot;
+          ],
+          speed_tip: &quot;LCM Method: Assume total work = LCM(10, 15) = 30 units. A makes 3 units/day, B makes 2 units/day. Together they make 5 units/day. Days = 30 Ã· 5 = 6 days.&quot;,
+          common_pitfall: &quot;Averaging the two numbers: (10 + 15)/2 = 12.5 days (which is slower than A working alone!).&quot;
+        }
+      },
+      {
+        id: &quot;q_9&quot;,
+        q: &quot;The area of a rectangle with length 12 cm and breadth 8 cm is:&quot;,
+        topic: &quot;Mensuration &amp; Geometry&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;40 cmÂ²&quot;, &quot;80 cmÂ²&quot;, &quot;96 cmÂ²&quot;, &quot;120 cmÂ²&quot;],
+        a: 2,
+        explanation: {
+          summary: &quot;The area of a 2D rectangle equals the product of its length and width.&quot;,
+          formula: &quot;Area = Length Ã— Breadth&quot;,
+          steps: [
+            &quot;Length = 12 cm, Breadth = 8 cm.&quot;,
+            &quot;Area = 12 Ã— 8.&quot;,
+            &quot;12 Ã— 8 = 96 cmÂ².&quot;
+          ],
+          speed_tip: &quot;Think: 12 Ã— 8 = 10 Ã— 8 (80) + 2 Ã— 8 (16) = 96.&quot;,
+          common_pitfall: &quot;Calculating perimeter instead: 2 Ã— (12 + 8) = 40 cm (option 1).&quot;
+        }
+      },
+      {
+        id: &quot;q_10&quot;,
+        q: &quot;If 15% of a number is 45, what is the number?&quot;,
+        topic: &quot;Percentages&quot;,
+        difficulty: &quot;Medium&quot;,
+        o: [&quot;200&quot;, &quot;250&quot;, &quot;300&quot;, &quot;350&quot;],
+        a: 2,
+        explanation: {
+          summary: &quot;Reverse percentage: find 100% when a partial percentage is known.&quot;,
+          formula: &quot;Number = (Given value Ã· Percentage) Ã— 100&quot;,
+          steps: [
+            &quot;Let the number be N.&quot;,
+            &quot;0.15 Ã— N = 45.&quot;,
+            &quot;N = 45 / 0.15 = (45 Ã— 100) / 15.&quot;,
+            &quot;45 Ã· 15 = 3 =&gt; 3 Ã— 100 = 300.&quot;
+          ],
+          speed_tip: &quot;If 15% is 45, then 1% = 45 Ã· 15 = 3. Therefore, 100% is simply 3 Ã— 100 = 300.&quot;,
+          common_pitfall: &quot;Multiplying 45 by 15% (giving 6.75) instead of dividing.&quot;
+        }
+      }
+    ]
+  },
+
+  logical: {
+    letter: &quot;L&quot;,
+    name: &quot;Logical Reasoning&quot;,
+    desc: &quot;Series patterns, coding-decoding, blood relations, syllogisms, and directional awareness.&quot;,
+    questions: [
+      {
+        id: &quot;l_1&quot;,
+        q: &quot;Identify the next number in the sequence: 2, 6, 12, 20, 30, ?&quot;,
+        topic: &quot;Number Series&quot;,
+        difficulty: &quot;Medium&quot;,
+        o: [&quot;38&quot;, &quot;40&quot;, &quot;42&quot;, &quot;44&quot;],
+        a: 2,
+        explanation: {
+          summary: &quot;The difference between consecutive terms increases by 2 each step.&quot;,
+          formula: &quot;Pattern: n Ã— (n + 1) or differences of +4, +6, +8, +10, +12&quot;,
+          steps: [
+            &quot;Difference between 6 and 2 is 4.&quot;,
+            &quot;Difference between 12 and 6 is 6.&quot;,
+            &quot;Difference between 20 and 12 is 8.&quot;,
+            &quot;Difference between 30 and 20 is 10.&quot;,
+            &quot;Next difference must be 12. 30 + 12 = 42.&quot;
+          ],
+          speed_tip: &quot;Notice that each term is n(n+1): 1Ã—2=2, 2Ã—3=6, 3Ã—4=12, 4Ã—5=20, 5Ã—6=30. The next term is 6Ã—7 = 42.&quot;,
+          common_pitfall: &quot;Assuming an arithmetic increase of +10 throughout and guessing 40.&quot;
+        }
+      },
+      {
+        id: &quot;l_2&quot;,
+        q: &quot;Choose the odd one out: Apple, Banana, Mango, Carrot&quot;,
+        topic: &quot;Classification&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;Apple&quot;, &quot;Banana&quot;, &quot;Mango&quot;, &quot;Carrot&quot;],
+        a: 3,
+        explanation: {
+          summary: &quot;Identify the unique category difference across items.&quot;,
+          formula: &quot;Botanical / Culinary Classification&quot;,
+          steps: [
+            &quot;Apple, Banana, and Mango are all fruits.&quot;,
+            &quot;Carrot is a root vegetable.&quot;,
+            &quot;Therefore, Carrot does not belong to the fruit group.&quot;
+          ],
+          speed_tip: &quot;Think about where the edible portion grows: fruits grow on trees/plants from flowers; carrots are underground taproots.&quot;,
+          common_pitfall: &quot;Overthinking color or regional availability.&quot;
+        }
+      },
+      {
+        id: &quot;l_3&quot;,
+        q: &quot;Kitten is to Cat as Puppy is to ______:&quot;,
+        topic: &quot;Analogy&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;Dog&quot;, &quot;Wolf&quot;, &quot;Fox&quot;, &quot;Lion&quot;],
+        a: 0,
+        explanation: {
+          summary: &quot;Analogy establishes an offspring-to-adult relationship.&quot;,
+          formula: &quot;Offspring : Adult species&quot;,
+          steps: [
+            &quot;A kitten is the juvenile offspring of a cat.&quot;,
+            &quot;Similarly, a puppy is the juvenile offspring of a dog.&quot;
+          ],
+          speed_tip: &quot;Read as an exact relation: [X] is the baby of [Y]. Puppy is the baby of Dog.&quot;,
+          common_pitfall: &quot;Selecting related wild canines like Wolf or Fox.&quot;
+        }
+      },
+      {
+        id: &quot;l_4&quot;,
+        q: &quot;All cats are animals. All animals are living beings. Which deduction must be valid?&quot;,
+        topic: &quot;Syllogisms&quot;,
+        difficulty: &quot;Medium&quot;,
+        o: [&quot;All living beings are cats&quot;, &quot;All cats are living beings&quot;, &quot;Some animals are not living beings&quot;, &quot;No cat is an animal&quot;],
+        a: 1,
+        explanation: {
+          summary: &quot;Transitive property of universal affirmative sets (Euler/Venn diagram).&quot;,
+          formula: &quot;If A âŠ† B and B âŠ† C, then A âŠ† C&quot;,
+          steps: [
+            &quot;Set Cats is completely enclosed inside Set Animals (Cats âŠ† Animals).&quot;,
+            &quot;Set Animals is completely enclosed inside Set Living Beings (Animals âŠ† Living Beings).&quot;,
+            &quot;Hence, the inner circle Cats is entirely inside Living Beings: All cats are living beings.&quot;
+          ],
+          speed_tip: &quot;In syllogisms, &apos;All A are B&apos; + &apos;All B are C&apos; always directly guarantees &apos;All A are C&apos;.&quot;,
+          common_pitfall: &quot;Illicit conversion: assuming that if all cats are living beings, then all living beings must be cats.&quot;
+        }
+      },
+      {
+        id: &quot;l_5&quot;,
+        q: &quot;If CAT is coded as DBU (each letter shifted +1), how is DOG coded?&quot;,
+        topic: &quot;Coding &amp; Decoding&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;EPH&quot;, &quot;EOH&quot;, &quot;DPH&quot;, &quot;CNF&quot;],
+        a: 0,
+        explanation: {
+          summary: &quot;Consistent Caesar cipher alphabet shift.&quot;,
+          formula: &quot;Char(n) -&gt; Char(n + 1)&quot;,
+          steps: [
+            &quot;C (+1) = D, A (+1) = B, T (+1) = U =&gt; DBU.&quot;,
+            &quot;Applying the exact same +1 shift to DOG:&quot;,
+            &quot;D (+1) = E.&quot;,
+            &quot;O (+1) = P.&quot;,
+            &quot;G (+1) = H.&quot;,
+            &quot;Result = EPH.&quot;
+          ],
+          speed_tip: &quot;Check just the first and last letters: D-&gt;E and G-&gt;H. Only option EPH starts with E and ends with H.&quot;,
+          common_pitfall: &quot;Shifting backwards (-1) to CNF instead of forwards (+1).&quot;
+        }
+      },
+      {
+        id: &quot;l_6&quot;,
+        q: &quot;Pointing to a photograph, a man says: &apos;His father is the only son of my father.&apos; Whose photograph is it?&quot;,
+        topic: &quot;Blood Relations&quot;,
+        difficulty: &quot;Hard&quot;,
+        o: [&quot;His own&quot;, &quot;His son&apos;s&quot;, &quot;His father&apos;s&quot;, &quot;His brother&apos;s&quot;],
+        a: 1,
+        explanation: {
+          summary: &quot;Deconstruct the speaker&apos;s family tree from the deepest possessive clause backward.&quot;,
+          formula: &quot;Family tree clause deconstruction&quot;,
+          steps: [
+            &quot;Identify the phrase: &apos;the only son of my father&apos;.&quot;,
+            &quot;Since the speaker is a man, the &apos;only son of my father&apos; is the speaker himself.&quot;,
+            &quot;Substitute that back: &apos;His father [the boy in the photo&apos;s father] is ME.&apos;&quot;,
+            &quot;If the man is the boy&apos;s father, the photograph is of his son.&quot;
+          ],
+          speed_tip: &quot;Always replace self-referential phrases first: &apos;Only son of my father&apos; = Myself.&quot;,
+          common_pitfall: &quot;Forgetting that the photo has a &apos;father&apos; mentioned, leading people to incorrectly select &apos;His own photograph&apos;.&quot;
+        }
+      },
+      {
+        id: &quot;l_7&quot;,
+        q: &quot;Find the missing term: 1, 4, 9, 16, 25, ?&quot;,
+        topic: &quot;Number Series&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;30&quot;, &quot;34&quot;, &quot;36&quot;, &quot;49&quot;],
+        a: 2,
+        explanation: {
+          summary: &quot;Sequence of consecutive perfect squares.&quot;,
+          formula: &quot;T(n) = nÂ² for n = 1, 2, 3, 4, 5, 6&quot;,
+          steps: [
+            &quot;1Â² = 1, 2Â² = 4, 3Â² = 9, 4Â² = 16, 5Â² = 25.&quot;,
+            &quot;The 6th term is 6Â².&quot;,
+            &quot;6 Ã— 6 = 36.&quot;
+          ],
+          speed_tip: &quot;Recognize square numbers immediately: 1, 4, 9, 16, 25, 36, 49, 64, 81, 100.&quot;,
+          common_pitfall: &quot;Adding 9 instead of following the quadratic sequence.&quot;
+        }
+      },
+      {
+        id: &quot;l_8&quot;,
+        q: &quot;Ravi walks 5 km North, turns East and walks 5 km, then turns South and walks 5 km. How far is he from his start point?&quot;,
+        topic: &quot;Direction Sense&quot;,
+        difficulty: &quot;Medium&quot;,
+        o: [&quot;0 km&quot;, &quot;5 km&quot;, &quot;10 km&quot;, &quot;15 km&quot;],
+        a: 1,
+        explanation: {
+          summary: &quot;Vector displacement: opposite orthogonal movements cancel each other out.&quot;,
+          formula: &quot;Displacement vector: (Î”x, Î”y)&quot;,
+          steps: [
+            &quot;Vertical movement: 5 km North (+5 y) followed by 5 km South (-5 y). Net vertical change = 0 km.&quot;,
+            &quot;Horizontal movement: 5 km East (+5 x).&quot;,
+            &quot;Final position is exactly 5 km East of origin. Distance = 5 km.&quot;
+          ],
+          speed_tip: &quot;Visual rectangle: 5 km North and 5 km South form opposing sides of a square, leaving only the East side of 5 km.&quot;,
+          common_pitfall: &quot;Adding the total path distance walked: 5 + 5 + 5 = 15 km (distance vs displacement).&quot;
+        }
+      },
+      {
+        id: &quot;l_9&quot;,
+        q: &quot;What is the angle between the hour hand and minute hand of a clock at 3:00?&quot;,
+        topic: &quot;Clock &amp; Angles&quot;,
+        difficulty: &quot;Medium&quot;,
+        o: [&quot;60Â°&quot;, &quot;75Â°&quot;, &quot;90Â°&quot;, &quot;120Â°&quot;],
+        a: 2,
+        explanation: {
+          summary: &quot;A clock dial represents 360Â° partitioned into 12 hours (30Â° per hour).&quot;,
+          formula: &quot;Angle = |30H âˆ’ 5.5M| or 30Â° Ã— number of hour divisions&quot;,
+          steps: [
+            &quot;At 3:00, the minute hand points vertically at 12.&quot;,
+            &quot;The hour hand points horizontally at 3.&quot;,
+            &quot;Number of hour marks between 12 and 3 = 3 marks.&quot;,
+            &quot;Angle = 3 Ã— 30Â° = 90Â°.&quot;
+          ],
+          speed_tip: &quot;At 3:00, the hands form a perpendicular corner (quarter circle), which is visually 90Â°.&quot;,
+          common_pitfall: &quot;Using 60Â° because 15 minutes is 1/4 of an hour.&quot;
+        }
+      },
+      {
+        id: &quot;l_10&quot;,
+        q: &quot;Complete the letter series: A, C, F, J, ?&quot;,
+        topic: &quot;Letter Series&quot;,
+        difficulty: &quot;Hard&quot;,
+        o: [&quot;M&quot;, &quot;N&quot;, &quot;O&quot;, &quot;P&quot;],
+        a: 2,
+        explanation: {
+          summary: &quot;Incremental positional gaps between alphabet index numbers.&quot;,
+          formula: &quot;Position index: A=1, C=3 (+2), F=6 (+3), J=10 (+4), ? (+5)&quot;,
+          steps: [
+            &quot;A is letter 1.&quot;,
+            &quot;C is letter 3 (gap of +2).&quot;,
+            &quot;F is letter 6 (gap of +3).&quot;,
+            &quot;J is letter 10 (gap of +4).&quot;,
+            &quot;Next letter must have a gap of +5 from J: 10 + 5 = 15th letter.&quot;,
+            &quot;The 15th letter of the alphabet is O.&quot;
+          ],
+          speed_tip: &quot;Use the mnemonic EJOTY (5, 10, 15, 20, 25). Since 10 + 5 = 15, it corresponds directly to &apos;O&apos;.&quot;,
+          common_pitfall: &quot;Stopping at an increase of +4 and selecting N (14th letter).&quot;
+        }
+      }
+    ]
+  },
+
+  verbal: {
+    letter: &quot;V&quot;,
+    name: &quot;Verbal Ability&quot;,
+    desc: &quot;Synonyms, antonyms, subject-verb agreement, idioms, spelling, and sentence corrections.&quot;,
+    questions: [
+      {
+        id: &quot;v_1&quot;,
+        q: &quot;Choose the word most nearly similar in meaning (Synonym) to: &apos;HAPPY&apos;&quot;,
+        topic: &quot;Vocabulary &amp; Synonyms&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;Sad&quot;, &quot;Joyful&quot;, &quot;Angry&quot;, &quot;Tired&quot;],
+        a: 1,
+        explanation: {
+          summary: &quot;Synonyms are words that express equivalent or closely related concepts.&quot;,
+          formula: &quot;Semantic equivalence&quot;,
+          steps: [
+            &quot;&apos;Happy&apos; denotes feelings of pleasure, contentment, or joy.&quot;,
+            &quot;&apos;Joyful&apos; means feeling, expressing, or causing great happiness.&quot;,
+            &quot;Sad is an antonym; Angry and Tired are unrelated negative states.&quot;
+          ],
+          speed_tip: &quot;Evaluate positive vs negative valence: &apos;Happy&apos; is positive; only &apos;Joyful&apos; is positive among the choices.&quot;,
+          common_pitfall: &quot;Selecting an antonym under time pressure.&quot;
+        }
+      },
+      {
+        id: &quot;v_2&quot;,
+        q: &quot;Choose the word opposite in meaning (Antonym) to: &apos;ANCIENT&apos;&quot;,
+        topic: &quot;Vocabulary &amp; Antonyms&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;Old&quot;, &quot;Historic&quot;, &quot;Modern&quot;, &quot;Antique&quot;],
+        a: 2,
+        explanation: {
+          summary: &quot;Antonyms represent the opposing end of a semantic spectrum.&quot;,
+          formula: &quot;Opposite temporal era&quot;,
+          steps: [
+            &quot;&apos;Ancient&apos; refers to belonging to the very distant past.&quot;,
+            &quot;Its opposite refers to contemporary or present-day times: &apos;Modern&apos;.&quot;,
+            &quot;Old, Historic, and Antique are all synonyms of ancient.&quot;
+          ],
+          speed_tip: &quot;Notice that three options (Old, Historic, Antique) are synonymous with each other. The odd one out (&apos;Modern&apos;) is the antonym.&quot;,
+          common_pitfall: &quot;Selecting a synonym like &apos;Historic&apos; instead of the requested opposite.&quot;
+        }
+      },
+      {
+        id: &quot;v_3&quot;,
+        q: &quot;Fill in the blank: &apos;She ______ to school every day.&apos;&quot;,
+        topic: &quot;Grammar &amp; Subject-Verb Agreement&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;go&quot;, &quot;goes&quot;, &quot;going&quot;, &quot;gone&quot;],
+        a: 1,
+        explanation: {
+          summary: &quot;Third-person singular subjects require the singular verb form ending in -s or -es in simple present tense.&quot;,
+          formula: &quot;Subject-Verb Agreement (Singular third person -&gt; verb + s/es)&quot;,
+          steps: [
+            &quot;Subject is &apos;She&apos; (third-person singular pronoun).&quot;,
+            &quot;&apos;Every day&apos; indicates a routine action requiring Simple Present Tense.&quot;,
+            &quot;The singular present form of &apos;go&apos; is &apos;goes&apos;.&quot;
+          ],
+          speed_tip: &quot;He / She / It always takes the verb with &apos;s&apos; (goes, writes, walks).&quot;,
+          common_pitfall: &quot;Using the base plural form &apos;go&apos; (which is used for I/You/We/They).&quot;
+        }
+      },
+      {
+        id: &quot;v_4&quot;,
+        q: &quot;Identify the correctly spelled word:&quot;,
+        topic: &quot;Spelling &amp; Conventions&quot;,
+        difficulty: &quot;Medium&quot;,
+        o: [&quot;Acommodation&quot;, &quot;Accomodation&quot;, &quot;Accommodation&quot;, &quot;Acomodation&quot;],
+        a: 2,
+        explanation: {
+          summary: &quot;Accommodation contains double &apos;c&apos; and double &apos;m&apos;.&quot;,
+          formula: &quot;Orthographic rule: double-c, double-m&quot;,
+          steps: [
+            &quot;Root verb: accommodate (ac- + com- + modate).&quot;,
+            &quot;Notice the two &apos;c&apos;s: cc.&quot;,
+            &quot;Notice the two &apos;m&apos;s: mm.&quot;,
+            &quot;Correct form: Accommodation.&quot;
+          ],
+          speed_tip: &quot;Memory hook: &apos;Accommodation has enough room for two Cs and two Ms.&apos;&quot;,
+          common_pitfall: &quot;Missing the second &apos;m&apos;, producing &apos;Accomodation&apos;.&quot;
+        }
+      },
+      {
+        id: &quot;v_5&quot;,
+        q: &quot;What does the idiom &apos;a piece of cake&apos; signify?&quot;,
+        topic: &quot;Idioms &amp; Phrases&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;A delicious dessert&quot;, &quot;Something very easy&quot;, &quot;Something expensive&quot;, &quot;A small token of appreciation&quot;],
+        a: 1,
+        explanation: {
+          summary: &quot;Idioms convey non-literal figurative meanings understood through common usage.&quot;,
+          formula: &quot;Figurative interpretation&quot;,
+          steps: [
+            &quot;Literal translation relates to food, but idioms are figurative expressions.&quot;,
+            &quot;&apos;A piece of cake&apos; is universally recognized to mean an effortlessly accomplished task.&quot;
+          ],
+          speed_tip: &quot;Beware of literal distractors (like &apos;A delicious dessert&apos;). Idioms are almost never literal.&quot;,
+          common_pitfall: &quot;Choosing the literal option involving food or dessert.&quot;
+        }
+      },
+      {
+        id: &quot;v_6&quot;,
+        q: &quot;Provide one word for: &apos;A person who writes books&apos;&quot;,
+        topic: &quot;One-Word Substitution&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;Editor&quot;, &quot;Author&quot;, &quot;Publisher&quot;, &quot;Reader&quot;],
+        a: 1,
+        explanation: {
+          summary: &quot;Identify specific professional designations in publication.&quot;,
+          formula: &quot;Creator of literary works = Author&quot;,
+          steps: [
+            &quot;Author: The originator or writer of an article, book, or story.&quot;,
+            &quot;Editor: Person who reviews, corrects, and polishes written material.&quot;,
+            &quot;Publisher: Organization/person who finances and distributes the book.&quot;
+          ],
+          speed_tip: &quot;Associate: Author writes, Editor polishes, Publisher prints.&quot;,
+          common_pitfall: &quot;Confusing author with editor.&quot;
+        }
+      },
+      {
+        id: &quot;v_7&quot;,
+        q: &quot;Select the grammatically accurate sentence:&quot;,
+        topic: &quot;Grammar &amp; Subject-Verb Agreement&quot;,
+        difficulty: &quot;Hard&quot;,
+        o: [
+          &quot;Neither of the boys are ready.&quot;,
+          &quot;Neither of the boys is ready.&quot;,
+          &quot;Neither of the boys were ready.&quot;,
+          &quot;Neither of the boys be ready.&quot;
+        ],
+        a: 1,
+        explanation: {
+          summary: &quot;&apos;Neither&apos; functions as an indefinite singular pronoun when referring to two individuals separately.&quot;,
+          formula: &quot;Neither of + Plural Noun takes a Singular Verb&quot;,
+          steps: [
+            &quot;Examine subject: &apos;Neither of the boys&apos;.&quot;,
+            &quot;The head pronoun is &apos;Neither&apos;, which means &apos;not the one nor the other&apos; (singular).&quot;,
+            &quot;Singular subject requires a singular present verb: &apos;is&apos;.&quot;,
+            &quot;Correct sentence: &apos;Neither of the boys is ready.&apos;&quot;
+          ],
+          speed_tip: &quot;Don&apos;t be fooled by the plural noun &apos;boys&apos; immediately preceding the verb. The true grammatical subject is &apos;Neither&apos;.&quot;,
+          common_pitfall: &quot;Selecting &apos;are&apos; because the ear hears &apos;boys are&apos;.&quot;
+        }
+      },
+      {
+        id: &quot;v_8&quot;,
+        q: &quot;What is the plural form of &apos;Child&apos;?&quot;,
+        topic: &quot;Grammar &amp; Nouns&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;Childs&quot;, &quot;Childes&quot;, &quot;Children&quot;, &quot;Childrens&quot;],
+        a: 2,
+        explanation: {
+          summary: &quot;English has irregular Germanic plural forms that do not take standard -s or -es.&quot;,
+          formula: &quot;Irregular noun mutation (Child -&gt; Children)&quot;,
+          steps: [
+            &quot;Child does not take an -s suffix.&quot;,
+            &quot;The standard irregular plural is &apos;children&apos;.&quot;
+          ],
+          speed_tip: &quot;Never double-pluralize irregular nouns (avoid &apos;childrens&apos;).&quot;,
+          common_pitfall: &quot;Using &apos;childs&apos; or double-pluralizing as &apos;childrens&apos;.&quot;
+        }
+      },
+      {
+        id: &quot;v_9&quot;,
+        q: &quot;Fill in the blank with the appropriate article: &apos;He is ______ honest man.&apos;&quot;,
+        topic: &quot;Articles &amp; Prepositions&quot;,
+        difficulty: &quot;Medium&quot;,
+        o: [&quot;a&quot;, &quot;an&quot;, &quot;the&quot;, &quot;no article&quot;],
+        a: 1,
+        explanation: {
+          summary: &quot;Choice between &apos;a&apos; and &apos;an&apos; depends on the phonetic sound of the next word, not the alphabet letter.&quot;,
+          formula: &quot;Vowel sound -&gt; use &apos;an&apos;&quot;,
+          steps: [
+            &quot;The word &apos;honest&apos; begins with a silent &apos;h&apos;.&quot;,
+            &quot;Phonetically, it is pronounced /ËˆÉ’n.Éªst/ (starts with a short &apos;o&apos; vowel sound).&quot;,
+            &quot;Before words starting with a vowel sound, we use &apos;an&apos;.&quot;
+          ],
+          speed_tip: &quot;Sound it out: &apos;an honest&apos;, &apos;an hour&apos;, &apos;an heir&apos; (silent h). But &apos;a house&apos;, &apos;a hospital&apos; (voiced h).&quot;,
+          common_pitfall: &quot;Looking only at the written consonant &apos;H&apos; and mistakenly picking &apos;a&apos;.&quot;
+        }
+      },
+      {
+        id: &quot;v_10&quot;,
+        q: &quot;Choose the synonym of: &apos;RAPID&apos;&quot;,
+        topic: &quot;Vocabulary &amp; Synonyms&quot;,
+        difficulty: &quot;Easy&quot;,
+        o: [&quot;Slow&quot;, &quot;Quick&quot;, &quot;Weak&quot;, &quot;Late&quot;],
+        a: 1,
+        explanation: {
+          summary: &quot;&apos;Rapid&apos; describes high velocity or swift speed.&quot;,
+          formula: &quot;Velocity descriptor = Quick / Fast&quot;,
+          steps: [
+            &quot;&apos;Rapid&apos; means happening in a short time or moving at great speed.&quot;,
+            &quot;&apos;Quick&apos; is directly synonymous with rapid.&quot;,
+            &quot;Slow and Late are opposites.&quot;
+          ],
+          speed_tip: &quot;Associate with &apos;rapid transit&apos; or &apos;rapid fire&apos; = quick.&quot;,
+          common_pitfall: &quot;Confusing synonym with antonym (selecting &apos;Slow&apos;).&quot;
+        }
+      }
+    ]
+  }
+};
+
+const TEST_DURATION_SECONDS = 5 * 60; // 5-minute timed sprint
+
+/* ===========================================================
+   2. LOCAL STORAGE &amp; PERSISTENCE ENGINE
+   Manages:
+     - User accounts &amp; sessions
+     - Complete test logs
+     - Real-time topic mastery matrix
+     - Bookmarked questions
+   =========================================================== */
+const STORAGE_KEYS = {
+  USER: &quot;prepwise_user_session&quot;,
+  USERS_DB: &quot;prepwise_users_db&quot;,
+  HISTORY: &quot;prepwise_test_history&quot;,
+  TOPIC_STATS: &quot;prepwise_topic_mastery&quot;,
+  BOOKMARKS: &quot;prepwise_bookmarked_ids&quot;
+};
+
+// Safe storage accessors
+function getStoredJson(key, defaultVal) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : defaultVal;
+  } catch (e) {
+    console.error(&quot;Storage read error&quot;, e);
+    return defaultVal;
+  }
+}
+function setStoredJson(key, val) {
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
+  } catch (e) {
+    console.error(&quot;Storage write error&quot;, e);
+  }
+}
+
+/* ===========================================================
+   3. APP STATE
+   =========================================================== */
+let currentUser = getStoredJson(STORAGE_KEYS.USER, null);
+let currentCategoryKey = &quot;quantitative&quot;;
+let activeQuestions = [];
+let userAnswers = [];         // Selected option index or null
+let userMarked = [];          // Boolean flagged for review
+let userTimes = [];           // Seconds spent on each specific question
+let currentQIndex = 0;
+let testStartTime = 0;
+let testEndTime = 0;
+let testTimerInterval = null;
+let qTimerInterval = null;
+let currentQStartTime = 0;
+let lastSubmittedResult = null;
+let activeReviewFilter = &quot;all&quot;;
+let activeReviewTopic = &quot;all&quot;;
+
+// DOM Selector Helper
+const $ = id =&gt; document.getElementById(id);
+const ALL_VIEWS = [&quot;home&quot;, &quot;test&quot;, &quot;result&quot;, &quot;review&quot;, &quot;analytics&quot;, &quot;bookmarks&quot;];
+
+/* ===========================================================
+   4. NAVIGATION &amp; VIEW CONTROLLER
+   =========================================================== */
+function showView(viewName) {
+  if (viewName !== &quot;test&quot; &amp;&amp; testTimerInterval) {
+    if (!confirm(&quot;Are you sure you want to leave the active test? Your current attempt will be lost.&quot;)) {
+      return;
+    }
+    abortTest();
+  }
+
+  ALL_VIEWS.forEach(v =&gt; {
+    const el = $(&quot;view-&quot; + v);
+    if (el) el.classList.toggle(&quot;hidden&quot;, v !== viewName);
+  });
+
+  // Update active state in nav
+  [&quot;categories&quot;, &quot;analytics&quot;, &quot;bookmarks&quot;].forEach(nav =&gt; {
+    const btn = $(&quot;nav-&quot; + nav);
+    if (btn) btn.classList.remove(&quot;active&quot;);
+  });
+  if (viewName === &quot;home&quot;) $(&quot;nav-categories&quot;)?.classList.add(&quot;active&quot;);
+  if (viewName === &quot;analytics&quot;) $(&quot;nav-analytics&quot;)?.classList.add(&quot;active&quot;);
+  if (viewName === &quot;bookmarks&quot;) $(&quot;nav-bookmarks&quot;)?.classList.add(&quot;active&quot;);
+
+  window.scrollTo({ top: 0, behavior: &quot;smooth&quot; });
+
+  if (viewName === &quot;analytics&quot;) renderAnalyticsDashboard();
+  if (viewName === &quot;bookmarks&quot;) renderBookmarksView();
+  if (viewName === &quot;home&quot;) refreshHomeUserBanner();
+}
+
+function handleNavClick(section) {
+  if (section === &quot;categories&quot;) {
+    showView(&quot;home&quot;);
+    setTimeout(() =&gt; scrollToSection(&quot;categoriesSection&quot;), 50);
+  }
+}
+
+function scrollToSection(secId) {
+  const el = $(secId);
+  if (el) el.scrollIntoView({ behavior: &quot;smooth&quot; });
+}
+
+/* ===========================================================
+   5. AUTHENTICATION &amp; PROFILE SYSTEM
+   =========================================================== */
+function initAuth() {
+  if (!currentUser) {
+    // Initialize default guest profile if none exists
+    currentUser = {
+      name: &quot;Abhishek&quot;,
+      email: &quot;abhi@prepwise.demo&quot;,
+      isGuest: false,
+      targetGoal: &quot;Campus Placements (TCS, Infosys, Wipro)&quot;,
+      interestedTopics: [&quot;Percentages&quot;, &quot;Time &amp; Work&quot;, &quot;Blood Relations&quot;, &quot;Syllogisms&quot;, &quot;Grammar &amp; Subject-Verb Agreement&quot;],
+      createdAt: new Date().toISOString()
+    };
+    setStoredJson(STORAGE_KEYS.USER, currentUser);
+  }
+  renderAuthHeader();
+  refreshHomeUserBanner();
+  updateBookmarksBadge();
+}
+
+function renderAuthHeader() {
+  const container = $(&quot;authContainer&quot;);
+  if (!container) return;
+
+  if (currentUser) {
+    const initial = (currentUser.name || &quot;U&quot;).charAt(0).toUpperCase();
+    container.innerHTML = `
+      &lt;div class=&quot;user-badge&quot; onclick=&quot;openGoalEditorModal()&quot; title=&quot;Target: ${currentUser.targetGoal}&quot;&gt;
+        &lt;div class=&quot;user-avatar&quot;&gt;${initial}&lt;/div&gt;
+        &lt;div class=&quot;user-name&quot;&gt;${escapeHtml(currentUser.name)}&lt;/div&gt;
+        &lt;button onclick=&quot;handleLogout(event)&quot; class=&quot;btn sm ghost&quot; style=&quot;padding:2px 8px;font-size:0.75rem;margin-left:4px&quot; title=&quot;Sign out&quot;&gt;Exit&lt;/button&gt;
+      &lt;/div&gt;
+    `;
+  } else {
+    container.innerHTML = `
+      &lt;button class=&quot;btn sm&quot; onclick=&quot;openAuthModal(&apos;login&apos;)&quot;&gt;Sign In / Register&lt;/button&gt;
+    `;
+  }
+}
+
+function openAuthModal(tab = &quot;login&quot;) {
+  $(&quot;authModal&quot;).classList.remove(&quot;hidden&quot;);
+  switchAuthTab(tab);
+}
+function closeAuthModal() {
+  $(&quot;authModal&quot;).classList.add(&quot;hidden&quot;);
+}
+
+function switchAuthTab(tab) {
+  $(&quot;tabBtnLogin&quot;).classList.toggle(&quot;active&quot;, tab === &quot;login&quot;);
+  $(&quot;tabBtnRegister&quot;).classList.toggle(&quot;active&quot;, tab === &quot;register&quot;);
+  $(&quot;tabBtnGuest&quot;).classList.toggle(&quot;active&quot;, tab === &quot;guest&quot;);
+
+  $(&quot;authTabLogin&quot;).classList.toggle(&quot;hidden&quot;, tab !== &quot;login&quot;);
+  $(&quot;authTabRegister&quot;).classList.toggle(&quot;hidden&quot;, tab !== &quot;register&quot;);
+  $(&quot;authTabGuest&quot;).classList.toggle(&quot;hidden&quot;, tab !== &quot;guest&quot;);
+
+  $(&quot;modalTitle&quot;).textContent =
+    tab === &quot;login&quot; ? &quot;Student Sign In&quot; :
+    tab === &quot;register&quot; ? &quot;Create Free Account&quot; : &quot;Quick Guest Access&quot;;
+}
+
+function handleLoginSubmit(e) {
+  e.preventDefault();
+  const email = $(&quot;loginEmail&quot;).value.trim();
+  const pass = $(&quot;loginPass&quot;).value;
+  if (!email || !pass) return;
+
+  currentUser = {
+    name: email.split(&quot;@&quot;)[0].replace(/[^a-zA-Z]/g, &quot; &quot;) || &quot;Student&quot;,
+    email: email,
+    isGuest: false,
+    targetGoal: &quot;Campus Placements (TCS, Infosys, Wipro)&quot;,
+    interestedTopics: [&quot;Percentages&quot;, &quot;Blood Relations&quot;, &quot;Time &amp; Work&quot;],
+    createdAt: new Date().toISOString()
+  };
+  setStoredJson(STORAGE_KEYS.USER, currentUser);
+  closeAuthModal();
+  renderAuthHeader();
+  refreshHomeUserBanner();
+}
+
+function handleRegisterSubmit(e) {
+  e.preventDefault();
+  const name = $(&quot;regName&quot;).value.trim();
+  const email = $(&quot;regEmail&quot;).value.trim();
+  const goal = $(&quot;regGoal&quot;).value;
+  if (!name || !email) return;
+
+  currentUser = {
+    name: name,
+    email: email,
+    isGuest: false,
+    targetGoal: goal,
+    interestedTopics: [&quot;Percentages&quot;, &quot;Time &amp; Work&quot;, &quot;Syllogisms&quot;, &quot;Grammar &amp; Subject-Verb Agreement&quot;],
+    createdAt: new Date().toISOString()
+  };
+  setStoredJson(STORAGE_KEYS.USER, currentUser);
+  closeAuthModal();
+  renderAuthHeader();
+  refreshHomeUserBanner();
+}
+
+function handleGuestSubmit() {
+  const name = $(&quot;guestName&quot;).value.trim() || &quot;Guest Aspirant&quot;;
+  currentUser = {
+    name: name,
+    email: &quot;guest@local.device&quot;,
+    isGuest: true,
+    targetGoal: &quot;General Aptitude Practice&quot;,
+    interestedTopics: [&quot;Percentages&quot;, &quot;Number Series&quot;, &quot;Vocabulary &amp; Synonyms&quot;],
+    createdAt: new Date().toISOString()
+  };
+  setStoredJson(STORAGE_KEYS.USER, currentUser);
+  closeAuthModal();
+  renderAuthHeader();
+  refreshHomeUserBanner();
+}
+
+function handleLogout(e) {
+  e.stopPropagation();
+  if (confirm(&quot;Sign out of Prepwise? Your saved diagnostics on this computer will be kept.&quot;)) {
+    currentUser = null;
+    localStorage.removeItem(STORAGE_KEYS.USER);
+    renderAuthHeader();
+    refreshHomeUserBanner();
+  }
+}
+
+// Goal &amp; Interests Editor
+function openGoalEditorModal() {
+  if (!currentUser) {
+    openAuthModal(&quot;login&quot;);
+    return;
+  }
+  $(&quot;goalSelect&quot;).value = currentUser.targetGoal || &quot;Campus Placements (TCS, Infosys, Wipro)&quot;;
+  
+  // Render subtopic checkboxes
+  const allSubtopics = getAllUniqueSubtopics();
+  const container = $(&quot;interestCheckboxes&quot;);
+  container.innerHTML = allSubtopics.map(t =&gt; {
+    const isChecked = (currentUser.interestedTopics || []).includes(t);
+    return `
+      &lt;label style=&quot;display:flex;align-items:center;gap:6px;cursor:pointer&quot;&gt;
+        &lt;input type=&quot;checkbox&quot; value=&quot;${escapeHtml(t)}&quot; ${isChecked ? &quot;checked&quot; : &quot;&quot;}&gt;
+        &lt;span&gt;${escapeHtml(t)}&lt;/span&gt;
+      &lt;/label&gt;
+    `;
+  }).join(&quot;&quot;);
+
+  $(&quot;goalModal&quot;).classList.remove(&quot;hidden&quot;);
+}
+function closeGoalModal() {
+  $(&quot;goalModal&quot;).classList.add(&quot;hidden&quot;);
+}
+function saveUserGoalsAndInterests() {
+  if (!currentUser) return;
+  currentUser.targetGoal = $(&quot;goalSelect&quot;).value;
+  const boxes = document.querySelectorAll(&quot;#interestCheckboxes input:checked&quot;);
+  currentUser.interestedTopics = Array.from(boxes).map(b =&gt; b.value);
+  setStoredJson(STORAGE_KEYS.USER, currentUser);
+  closeGoalModal();
+  renderAuthHeader();
+  refreshHomeUserBanner();
+  if (!$(&quot;view-analytics&quot;).classList.contains(&quot;hidden&quot;)) {
+    renderAnalyticsDashboard();
+  }
+}
+
+function refreshHomeUserBanner() {
+  const banner = $(&quot;userWelcomeBanner&quot;);
+  if (!currentUser) {
+    banner.classList.add(&quot;hidden&quot;);
+    return;
+  }
+  banner.classList.remove(&quot;hidden&quot;);
+  $(&quot;uwGreeting&quot;).textContent = `Welcome back, ${currentUser.name}!`;
+
+  const weakTopics = computeWeakTopics();
+  const chipContainer = $(&quot;uwWeakChips&quot;);
+  if (weakTopics.length &gt; 0) {
+    $(&quot;uwSummary&quot;).textContent = `Target: ${currentUser.targetGoal}. Based on recent tests, here are your priority weak areas:`;
+    chipContainer.innerHTML = weakTopics.slice(0, 3).map(w =&gt; `
+      &lt;span class=&quot;tag red&quot;&gt;âš ï¸ ${escapeHtml(w.topic)} (${w.accuracy}% accuracy)&lt;/span&gt;
+    `).join(&quot;&quot;);
+  } else {
+    $(&quot;uwSummary&quot;).textContent = `Target: ${currentUser.targetGoal}. Take any 5-minute category sprint to map your baseline proficiency!`;
+    chipContainer.innerHTML = (currentUser.interestedTopics || []).slice(0, 3).map(t =&gt; `
+      &lt;span class=&quot;tag blue&quot;&gt;Focus: ${escapeHtml(t)}&lt;/span&gt;
+    `).join(&quot;&quot;);
+  }
+}
+
+/* ===========================================================
+   6. CATEGORIES DISPLAY (Home Slide)
+   =========================================================== */
+function renderCategoryCards() {
+  const container = $(&quot;categoryGrid&quot;);
+  if (!container) return;
+
+  const topicStats = getStoredJson(STORAGE_KEYS.TOPIC_STATS, {});
+
+  container.innerHTML = Object.entries(QUESTION_BANK).map(([key, cat]) =&gt; {
+    // Gather subtopics
+    const subtopics = Array.from(new Set(cat.questions.map(q =&gt; q.topic))).slice(0, 4);
+    
+    // Calculate category level accuracy from history if available
+    let catAttempted = 0, catCorrect = 0;
+    cat.questions.forEach(q =&gt; {
+      const st = topicStats[q.topic];
+      if (st) {
+        catAttempted += st.attempted;
+        catCorrect += st.correct;
+      }
+    });
+    const accuracyLabel = catAttempted &gt; 0
+      ? `&lt;span class=&quot;tag ${catCorrect / catAttempted &gt;= 0.7 ? &quot;green&quot; : &quot;amber&quot;}&quot;&gt;${Math.round((catCorrect / catAttempted) * 100)}% Mastery&lt;/span&gt;`
+      : `&lt;span class=&quot;tag gray&quot;&gt;Ready to Start&lt;/span&gt;`;
+
+    return `
+      &lt;div class=&quot;cat-card&quot;&gt;
+        &lt;div&gt;
+          &lt;div class=&quot;cat-header&quot;&gt;
+            &lt;div class=&quot;cat-icon&quot;&gt;${cat.letter}&lt;/div&gt;
+            ${accuracyLabel}
+          &lt;/div&gt;
+          &lt;h3&gt;${cat.name}&lt;/h3&gt;
+          &lt;p class=&quot;cat-desc&quot;&gt;${cat.desc}&lt;/p&gt;
+          &lt;div class=&quot;cat-topics&quot;&gt;
+            ${subtopics.map(t =&gt; `&lt;span class=&quot;tag blue&quot;&gt;${escapeHtml(t)}&lt;/span&gt;`).join(&quot;&quot;)}
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;cat-card-footer&quot;&gt;
+          &lt;span class=&quot;cat-meta-txt&quot;&gt;${cat.questions.length} questions Â· 5 min&lt;/span&gt;
+          &lt;button class=&quot;btn sm&quot; onclick=&quot;startCategoryTest(&apos;${key}&apos;)&quot;&gt;Begin Test â†’&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    `;
+  }).join(&quot;&quot;);
+}
+
+/* ===========================================================
+   7. TIMED TEST ENGINE &amp; PER-QUESTION SPEED TRACKER
+   =========================================================== */
+function startCategoryTest(catKey) {
+  currentCategoryKey = catKey;
+  const categoryData = QUESTION_BANK[catKey];
+  activeQuestions = categoryData.questions;
+  userAnswers = new Array(activeQuestions.length).fill(null);
+  userMarked = new Array(activeQuestions.length).fill(false);
+  userTimes = new Array(activeQuestions.length).fill(0);
+  currentQIndex = 0;
+
+  testStartTime = Date.now();
+  testEndTime = testStartTime + (TEST_DURATION_SECONDS * 1000);
+
+  $(&quot;testCategoryTitle&quot;).textContent = categoryData.name;
+  showView(&quot;test&quot;);
+  renderTestQuestion();
+  
+  // Start 5-min Master Timer
+  clearInterval(testTimerInterval);
+  updateTestTimerDisplay();
+  testTimerInterval = setInterval(testTimerTick, 250);
+
+  // Start Individual Question Timer
+  startQuestionTimer();
+}
+
+function startQuestionTimer() {
+  currentQStartTime = Date.now();
+  clearInterval(qTimerInterval);
+  updateCurrentQTimeDisplay();
+  qTimerInterval = setInterval(updateCurrentQTimeDisplay, 1000);
+}
+
+function commitCurrentQTime() {
+  if (currentQStartTime &gt; 0) {
+    const elapsedSecs = Math.max(0, Math.round((Date.now() - currentQStartTime) / 1000));
+    userTimes[currentQIndex] = (userTimes[currentQIndex] || 0) + elapsedSecs;
+    currentQStartTime = Date.now();
+  }
+}
+
+function updateCurrentQTimeDisplay() {
+  const currentElapsed = Math.round((Date.now() - currentQStartTime) / 1000);
+  const totalOnThisQ = (userTimes[currentQIndex] || 0) + currentElapsed;
+  const m = Math.floor(totalOnThisQ / 60);
+  const s = String(totalOnThisQ % 60).padStart(2, &quot;0&quot;);
+  const el = $(&quot;testQTimeCounter&quot;);
+  if (el) el.textContent = `${m}:${s}`;
+}
+
+function testTimerTick() {
+  const remaining = Math.max(0, Math.ceil((testEndTime - Date.now()) / 1000));
+  updateTestTimerDisplay(remaining);
+  if (remaining === 0) {
+    commitCurrentQTime();
+    clearInterval(testTimerInterval);
+    clearInterval(qTimerInterval);
+    alert(&quot;Time is up! Your 5 minutes have concluded. Prepwise will now compile your results.&quot;);
+    submitTest(true);
+  }
+}
+
+function updateTestTimerDisplay(leftSecs = null) {
+  if (leftSecs === null) {
+    leftSecs = Math.max(0, Math.ceil((testEndTime - Date.now()) / 1000));
+  }
+  const m = String(Math.floor(leftSecs / 60)).padStart(2, &quot;0&quot;);
+  const s = String(leftSecs % 60).padStart(2, &quot;0&quot;);
+  const timerDigits = $(&quot;testTimerDigits&quot;);
+  const timerPill = $(&quot;testTimer&quot;);
+  if (timerDigits) timerDigits.textContent = `${m}:${s}`;
+  if (timerPill) {
+    timerPill.classList.toggle(&quot;low&quot;, leftSecs &lt;= 60);
+  }
+}
+
+function renderTestQuestion() {
+  const q = activeQuestions[currentQIndex];
+  $(&quot;testQIndexLabel&quot;).textContent = `Question ${currentQIndex + 1} of ${activeQuestions.length}`;
+  $(&quot;testTopicBadge&quot;).textContent = q.topic;
+  $(&quot;testDifficultyBadge&quot;).textContent = q.difficulty;
+  
+  // Progress Bar
+  const pct = ((currentQIndex + 1) / activeQuestions.length) * 100;
+  $(&quot;testProgressBar&quot;).style.width = pct + &quot;%&quot;;
+
+  $(&quot;testQuestionText&quot;).textContent = q.q;
+
+  // Options List
+  const optionsHtml = q.o.map((optText, i) =&gt; {
+    const isSelected = userAnswers[currentQIndex] === i;
+    return `
+      &lt;button class=&quot;opt-btn ${isSelected ? &quot;selected&quot; : &quot;&quot;}&quot; onclick=&quot;selectOption(${i})&quot;&gt;
+        &lt;span class=&quot;opt-letter&quot;&gt;${&quot;ABCD&quot;[i]}&lt;/span&gt;
+        &lt;span&gt;${escapeHtml(optText)}&lt;/span&gt;
+      &lt;/button&gt;
+    `;
+  }).join(&quot;&quot;);
+  $(&quot;testOptionsList&quot;).innerHTML = optionsHtml;
+
+  // Navigation state
+  $(&quot;testPrevBtn&quot;).disabled = currentQIndex === 0;
+  $(&quot;testNextBtn&quot;).disabled = currentQIndex === activeQuestions.length - 1;
+
+  // Mark for review toggle state
+  const isMarked = userMarked[currentQIndex];
+  const markBtn = $(&quot;testMarkBtn&quot;);
+  markBtn.classList.toggle(&quot;marked&quot;, isMarked);
+  markBtn.innerHTML = isMarked
+    ? `&lt;span&gt;âš‘&lt;/span&gt; Marked for Review`
+    : `&lt;span&gt;âš&lt;/span&gt; Mark for Review`;
+
+  renderQuestionPalette();
+}
+
+function selectOption(optIndex) {
+  // Toggle or select
+  if (userAnswers[currentQIndex] === optIndex) {
+    userAnswers[currentQIndex] = null; // deselect
+  } else {
+    userAnswers[currentQIndex] = optIndex;
+  }
+  renderTestQuestion();
+}
+
+function toggleMarkCurrentQuestion() {
+  userMarked[currentQIndex] = !userMarked[currentQIndex];
+  renderTestQuestion();
+}
+
+function navigateQuestion(step) {
+  commitCurrentQTime();
+  const nextIdx = currentQIndex + step;
+  if (nextIdx &gt;= 0 &amp;&amp; nextIdx &lt; activeQuestions.length) {
+    currentQIndex = nextIdx;
+    renderTestQuestion();
+    startQuestionTimer();
+  }
+}
+
+function jumpToQuestion(idx) {
+  commitCurrentQTime();
+  currentQIndex = idx;
+  renderTestQuestion();
+  startQuestionTimer();
+}
+
+function renderQuestionPalette() {
+  const palette = $(&quot;testPaletteGrid&quot;);
+  if (!palette) return;
+
+  palette.innerHTML = activeQuestions.map((_, i) =&gt; {
+    const isCurrent = i === currentQIndex;
+    const isAnswered = userAnswers[i] !== null;
+    const isMarked = userMarked[i];
+
+    let cls = &quot;p-btn&quot;;
+    if (isCurrent) cls += &quot; current&quot;;
+    else if (isMarked) cls += &quot; marked&quot;;
+    else if (isAnswered) cls += &quot; answered&quot;;
+
+    return `&lt;button class=&quot;${cls}&quot; onclick=&quot;jumpToQuestion(${i})&quot;&gt;${i + 1}&lt;/button&gt;`;
+  }).join(&quot;&quot;);
+}
+
+function abortTest() {
+  clearInterval(testTimerInterval);
+  clearInterval(qTimerInterval);
+  testTimerInterval = null;
+  qTimerInterval = null;
+}
+
+function confirmSubmitTest(isAuto = false) {
+  commitCurrentQTime();
+  if (!isAuto) {
+    const unansweredCount = userAnswers.filter(a =&gt; a === null).length;
+    const markedCount = userMarked.filter(m =&gt; m).length;
+    let confirmMsg = &quot;Ready to submit your test?&quot;;
+    if (unansweredCount &gt; 0 || markedCount &gt; 0) {
+      confirmMsg = `You have ${unansweredCount} unanswered question(s) and ${markedCount} flagged for review. Are you sure you want to finish now?`;
+    }
+    if (!confirm(confirmMsg)) return;
+  }
+  submitTest(isAuto);
+}
+
+/* ===========================================================
+   8. TEST SUBMISSION &amp; WEAK POINT DIAGNOSTICS
+   =========================================================== */
+function submitTest(isAuto = false) {
+  clearInterval(testTimerInterval);
+  clearInterval(qTimerInterval);
+  testTimerInterval = null;
+  qTimerInterval = null;
+
+  let correctCount = 0;
+  let wrongCount = 0;
+  let skippedCount = 0;
+
+  // Track per-test topic performance to provide immediate diagnostic insights
+  const runTopicPerformance = {};
+
+  activeQuestions.forEach((q, i) =&gt; {
+    const ans = userAnswers[i];
+    const isCorrect = ans === q.a;
+    const isSkipped = ans === null;
+
+    if (isSkipped) skippedCount++;
+    else if (isCorrect) correctCount++;
+    else wrongCount++;
+
+    if (!runTopicPerformance[q.topic]) {
+      runTopicPerformance[q.topic] = { total: 0, correct: 0, wrong: 0, skipped: 0 };
+    }
+    runTopicPerformance[q.topic].total++;
+    if (isCorrect) runTopicPerformance[q.topic].correct++;
+    else if (isSkipped) runTopicPerformance[q.topic].skipped++;
+    else runTopicPerformance[q.topic].wrong++;
+  });
+
+  const totalTimeSecs = Math.min(TEST_DURATION_SECONDS, Math.round((Date.now() - testStartTime) / 1000));
+  const avgTimePerQ = Math.round(totalTimeSecs / activeQuestions.length);
+  const accuracyPct = Math.round((correctCount / activeQuestions.length) * 100);
+
+  // Compile detailed result object
+  lastSubmittedResult = {
+    id: &quot;attempt_&quot; + Date.now(),
+    date: new Date().toLocaleString(),
+    timestamp: Date.now(),
+    categoryKey: currentCategoryKey,
+    categoryName: QUESTION_BANK[currentCategoryKey].name,
+    totalQuestions: activeQuestions.length,
+    correctCount,
+    wrongCount,
+    skippedCount,
+    totalTimeSecs,
+    avgTimePerQ,
+    accuracyPct,
+    questions: activeQuestions,
+    userAnswers: [...userAnswers],
+    userTimes: [...userTimes],
+    topicBreakdown: runTopicPerformance
+  };
+
+  // Persist to Lifetime Topic Mastery Matrix and Test History
+  recordAttemptInStorage(lastSubmittedResult);
+
+  // Render Result Screen
+  renderResultScreen(lastSubmittedResult, isAuto);
+  showView(&quot;result&quot;);
+}
+
+function renderResultScreen(res, isAuto) {
+  $(&quot;resultCategoryTitle&quot;).textContent = `${res.categoryName} Assessment`;
+  $(&quot;resultScoreRing&quot;).style.setProperty(&quot;--pct&quot;, `${res.accuracyPct}%`);
+  $(&quot;resultScoreScore&quot;).textContent = `${res.correctCount}/${res.totalQuestions}`;
+  $(&quot;resultScorePct&quot;).textContent = `${res.accuracyPct}% Accuracy`;
+
+  $(&quot;resCorrectCount&quot;).textContent = res.correctCount;
+  $(&quot;resIncorrectCount&quot;).textContent = res.wrongCount;
+  $(&quot;resSkippedCount&quot;).textContent = res.skippedCount;
+
+  const min = Math.floor(res.totalTimeSecs / 60);
+  const sec = String(res.totalTimeSecs % 60).padStart(2, &quot;0&quot;);
+  $(&quot;resTimeTaken&quot;).textContent = `${min}:${sec}`;
+  $(&quot;resAvgTime&quot;).textContent = `${res.avgTimePerQ}s`;
+
+  // Feedback Message
+  let msg = isAuto ? &quot;Time is up! Your responses were submitted automatically. &quot; : &quot;&quot;;
+  if (res.accuracyPct &gt;= 80) {
+    msg += &quot;Outstanding performance! You have a solid grasp of this section. Review minor nuances below to achieve complete mastery.&quot;;
+  } else if (res.accuracyPct &gt;= 50) {
+    msg += &quot;Good effort. You have the foundational logic down, but specific subtopics need refinement. Check the identified weak areas below.&quot;;
+  } else {
+    msg += &quot;Keep practicing. Analyzing where your logic went off-track is the fastest way to improve. Study the step-by-step solutions below.&quot;;
+  }
+  $(&quot;resultMessage&quot;).textContent = msg;
+
+  // Diagnostic Callouts (Specific Weaknesses and Strengths detected in this run)
+  const diagList = $(&quot;resDiagnosticList&quot;);
+  const diagnosticItems = [];
+
+  Object.entries(res.topicBreakdown).forEach(([topic, stat]) =&gt; {
+    const acc = Math.round((stat.correct / stat.total) * 100);
+    if (stat.correct &lt; stat.total) {
+      diagnosticItems.push(`
+        &lt;div class=&quot;rd-item weak&quot;&gt;
+          &lt;span&gt;âš ï¸&lt;/span&gt;
+          &lt;div&gt;
+            &lt;b&gt;Attention Needed on ${escapeHtml(topic)}:&lt;/b&gt;
+            Scored ${stat.correct}/${stat.total} (${acc}%). Study the step-by-step methods in the review to correct formulas or assumptions.
+          &lt;/div&gt;
+        &lt;/div&gt;
+      `);
+    } else {
+      diagnosticItems.push(`
+        &lt;div class=&quot;rd-item strong&quot;&gt;
+          &lt;span&gt;âœ”&lt;/span&gt;
+          &lt;div&gt;
+            &lt;b&gt;Strong Spot in ${escapeHtml(topic)}:&lt;/b&gt;
+            100% accuracy (${stat.total}/${stat.total}). Excellent command of this concept.
+          &lt;/div&gt;
+        &lt;/div&gt;
+      `);
+    }
+  });
+
+  diagList.innerHTML = diagnosticItems.join(&quot;&quot;);
+}
+
+function restartCurrentTest() {
+  if (currentCategoryKey) {
+    startCategoryTest(currentCategoryKey);
+  }
+}
+
+/* ===========================================================
+   9. PERSISTENCE ENGINE (Updating Mastery &amp; History)
+   =========================================================== */
+function recordAttemptInStorage(res) {
+  // 1. Update Test History
+  const history = getStoredJson(STORAGE_KEYS.HISTORY, []);
+  history.unshift({
+    id: res.id,
+    date: res.date,
+    categoryName: res.categoryName,
+    categoryKey: res.categoryKey,
+    scoreText: `${res.correctCount}/${res.totalQuestions}`,
+    accuracyPct: res.accuracyPct,
+    timeSecs: res.totalTimeSecs,
+    weakTopics: Object.entries(res.topicBreakdown)
+      .filter(([_, s]) =&gt; s.correct &lt; s.total)
+      .map(([t]) =&gt; t)
+  });
+  setStoredJson(STORAGE_KEYS.HISTORY, history.slice(0, 30)); // Keep last 30 tests
+
+  // 2. Update Topic Mastery Matrix
+  const topicStats = getStoredJson(STORAGE_KEYS.TOPIC_STATS, {});
+  res.questions.forEach((q, i) =&gt; {
+    const ans = res.userAnswers[i];
+    const isCorrect = ans === q.a;
+    const isSkipped = ans === null;
+
+    if (!topicStats[q.topic]) {
+      topicStats[q.topic] = {
+        categoryKey: res.categoryKey,
+        attempted: 0,
+        correct: 0,
+        wrong: 0,
+        skipped: 0,
+        totalTimeSec: 0
+      };
+    }
+    topicStats[q.topic].attempted++;
+    topicStats[q.topic].totalTimeSec += (res.userTimes[i] || 0);
+    if (isCorrect) topicStats[q.topic].correct++;
+    else if (isSkipped) topicStats[q.topic].skipped++;
+    else topicStats[q.topic].wrong++;
+  });
+  setStoredJson(STORAGE_KEYS.TOPIC_STATS, topicStats);
+
+  // Update Nav Badge
+  updateWeakNavBadge();
+}
+
+function computeWeakTopics() {
+  const topicStats = getStoredJson(STORAGE_KEYS.TOPIC_STATS, {});
+  const weakList = [];
+
+  Object.entries(topicStats).forEach(([topic, stat]) =&gt; {
+    if (stat.attempted &gt;= 1) {
+      const acc = Math.round((stat.correct / stat.attempted) * 100);
+      if (acc &lt; 60) {
+        weakList.push({
+          topic,
+          accuracy: acc,
+          attempted: stat.attempted,
+          correct: stat.correct,
+          wrong: stat.wrong,
+          skipped: stat.skipped,
+          advice: getTopicRemedialAdvice(topic)
+        });
+      }
+    }
+  });
+
+  // Sort by lowest accuracy first
+  return weakList.sort((a, b) =&gt; a.accuracy - b.accuracy);
+}
+
+function computeStrongTopics() {
+  const topicStats = getStoredJson(STORAGE_KEYS.TOPIC_STATS, {});
+  const strongList = [];
+
+  Object.entries(topicStats).forEach(([topic, stat]) =&gt; {
+    if (stat.attempted &gt;= 1) {
+      const acc = Math.round((stat.correct / stat.attempted) * 100);
+      if (acc &gt;= 75) {
+        strongList.push({
+          topic,
+          accuracy: acc,
+          attempted: stat.attempted,
+          correct: stat.correct
+        });
+      }
+    }
+  });
+
+  return strongList.sort((a, b) =&gt; b.accuracy - a.accuracy);
+}
+
+function updateWeakNavBadge() {
+  const weaks = computeWeakTopics();
+  const badge = $(&quot;weakNavBadge&quot;);
+  if (badge) {
+    if (weaks.length &gt; 0) {
+      badge.textContent = weaks.length;
+      badge.classList.remove(&quot;hidden&quot;);
+    } else {
+      badge.classList.add(&quot;hidden&quot;);
+    }
+  }
+}
+
+// Actionable human-friendly learning tips for topics
+function getTopicRemedialAdvice(topic) {
+  const tips = {
+    &quot;Percentages&quot;: &quot;Focus on converting percentages into clean fractions (e.g. 20% = 1/5) before computing base values.&quot;,
+    &quot;Speed, Time &amp; Distance&quot;: &quot;Watch unit consistency: verify if speed is in km/h or m/s (multiply by 5/18 to convert km/h to m/s).&quot;,
+    &quot;Time &amp; Work&quot;: &quot;Use the LCM method to calculate daily work units instead of manipulating reciprocal fractions.&quot;,
+    &quot;Profit &amp; Loss&quot;: &quot;Always compute profit and loss percentages over Cost Price (CP), not Selling Price (SP).&quot;,
+    &quot;Simple Interest&quot;: &quot;Remember that SI does not compound year-over-year. Interest is identical each year.&quot;,
+    &quot;Ratio &amp; Proportion&quot;: &quot;Sum the ratio parts first to determine the value of a single unit before solving.&quot;,
+    &quot;Algebra &amp; Linear Equations&quot;: &quot;Check signs when moving terms across the &apos;=&apos; operator; plug your answer back to verify.&quot;,
+    &quot;Averages&quot;: &quot;For arithmetic sequences, remember the average is simply the middle number or (first + last)/2.&quot;,
+    &quot;Mensuration &amp; Geometry&quot;: &quot;Carefully distinguish between perimeter (boundary length) and area (enclosed space).&quot;,
+    &quot;Number Series&quot;: &quot;Write down differences between adjacent terms first; look for squares, cubes, or alternating gaps.&quot;,
+    &quot;Blood Relations&quot;: &quot;Draw a multi-generational family tree diagram; resolve &apos;only son of my father&apos; phrases to yourself.&quot;,
+    &quot;Syllogisms&quot;: &quot;Draw overlapping Euler circles. Remember that &apos;Some&apos; does not forbid &apos;All&apos;, and never assume the converse of an &apos;All&apos; statement.&quot;,
+    &quot;Coding &amp; Decoding&quot;: &quot;Write the alphabetical index numbers (1-26) above letters using the EJOTY benchmark.&quot;,
+    &quot;Direction Sense&quot;: &quot;Draw a standard 4-quadrant cross (+N, -S, +E, -W) and treat movements as x and y coordinate vectors.&quot;,
+    &quot;Clock &amp; Angles&quot;: &quot;Remember each hour mark is 30Â°. For arbitrary minutes, use |30H âˆ’ 5.5M|.&quot;,
+    &quot;Grammar &amp; Subject-Verb Agreement&quot;: &quot;Ignore prepositional phrases between the subject and verb (e.g. &apos;Neither of the boys&apos; is singular).&quot;,
+    &quot;Vocabulary &amp; Synonyms&quot;: &quot;Group options by positive or negative connotations to eliminate unsuitable distractors.&quot;,
+    &quot;Vocabulary &amp; Antonyms&quot;: &quot;Double check that you are selecting the opposite, not an appealing synonym.&quot;,
+    &quot;Spelling &amp; Conventions&quot;: &quot;Pay attention to words with double letters (e.g. Accommodation has double-c and double-m).&quot;,
+    &quot;Articles &amp; Prepositions&quot;: &quot;Choose &apos;a&apos; vs &apos;an&apos; based on sound, not the alphabet letter (e.g. &apos;an honest man&apos; due to silent h).&quot;
+  };
+  return tips[topic] || &quot;Review the step-by-step proofs in past tests to reinforce core concepts.&quot;;
+}
+
+function getAllUniqueSubtopics() {
+  const topics = new Set();
+  Object.values(QUESTION_BANK).forEach(cat =&gt; {
+    cat.questions.forEach(q =&gt; topics.add(q.topic));
+  });
+  return Array.from(topics).sort();
+}
+
+/* ===========================================================
+   10. DETAILED ANSWER REVIEW SYSTEM (Step-by-Step Proofs)
+   =========================================================== */
+function openDetailedReview(filter = &quot;all&quot;) {
+  if (!lastSubmittedResult) {
+    alert(&quot;No recent test session available to review. Complete a test first!&quot;);
+    return;
+  }
+  activeReviewFilter = filter;
+  activeReviewTopic = &quot;all&quot;;
+
+  $(&quot;reviewTitle&quot;).textContent = `Review Â· ${lastSubmittedResult.categoryName}`;
+
+  // Populate topic dropdown filter
+  const topicsInThisTest = Array.from(new Set(lastSubmittedResult.questions.map(q =&gt; q.topic))).sort();
+  const topicSelect = $(&quot;reviewTopicFilter&quot;);
+  topicSelect.innerHTML = `&lt;option value=&quot;all&quot;&gt;All Subtopics (${topicsInThisTest.length})&lt;/option&gt;` +
+    topicsInThisTest.map(t =&gt; `&lt;option value=&quot;${escapeHtml(t)}&quot;&gt;${escapeHtml(t)}&lt;/option&gt;`).join(&quot;&quot;);
+
+  renderReviewQuestions();
+  showView(&quot;review&quot;);
+}
+
+function setReviewFilter(filter) {
+  activeReviewFilter = filter;
+  document.querySelectorAll(&quot;.filter-btn&quot;).forEach(btn =&gt; {
+    btn.classList.toggle(&quot;active&quot;, btn.dataset.filter === filter);
+  });
+  renderReviewQuestions();
+}
+
+function applyReviewTopicFilter(topic) {
+  activeReviewTopic = topic;
+  renderReviewQuestions();
+}
+
+function renderReviewQuestions() {
+  if (!lastSubmittedResult) return;
+
+  const qs = lastSubmittedResult.questions;
+  const userAns = lastSubmittedResult.userAnswers;
+  const userTimes = lastSubmittedResult.userTimes;
+  const bookmarkedIds = getStoredJson(STORAGE_KEYS.BOOKMARKS, []);
+
+  // Update filter counters
+  let countCorrect = 0, countWrong = 0, countSkipped = 0;
+  qs.forEach((q, i) =&gt; {
+    if (userAns[i] === null) countSkipped++;
+    else if (userAns[i] === q.a) countCorrect++;
+    else countWrong++;
+  });
+  $(&quot;countRevAll&quot;).textContent = qs.length;
+  $(&quot;countRevWrong&quot;).textContent = countWrong;
+  $(&quot;countRevSkipped&quot;).textContent = countSkipped;
+  $(&quot;countRevCorrect&quot;).textContent = countCorrect;
+
+  const container = $(&quot;reviewQuestionsList&quot;);
+  let renderedCount = 0;
+
+  const cardsHtml = qs.map((q, i) =&gt; {
+    const mine = userAns[i];
+    const isSkipped = mine === null;
+    const isCorrect = mine === q.a;
+    const statusClass = isCorrect ? &quot;status-correct&quot; : (isSkipped ? &quot;status-skipped&quot; : &quot;status-wrong&quot;);
+    const statusLabel = isCorrect
+      ? `&lt;span class=&quot;tag green&quot;&gt;âœ” Correct&lt;/span&gt;`
+      : (isSkipped ? `&lt;span class=&quot;tag amber&quot;&gt;â—‹ Unanswered&lt;/span&gt;` : `&lt;span class=&quot;tag red&quot;&gt;âœ– Incorrect&lt;/span&gt;`);
+
+    // Apply Filter
+    if (activeReviewFilter === &quot;correct&quot; &amp;&amp; !isCorrect) return &quot;&quot;;
+    if (activeReviewFilter === &quot;wrong&quot; &amp;&amp; (isCorrect || isSkipped)) return &quot;&quot;;
+    if (activeReviewFilter === &quot;skipped&quot; &amp;&amp; !isSkipped) return &quot;&quot;;
+
+    // Apply Topic Filter
+    if (activeReviewTopic !== &quot;all&quot; &amp;&amp; q.topic !== activeReviewTopic) return &quot;&quot;;
+
+    renderedCount++;
+
+    const isBookmarked = bookmarkedIds.includes(q.id);
+    const timeSpent = userTimes[i] || 0;
+
+    // Render Options
+    const optionsHtml = q.o.map((optText, oIdx) =&gt; {
+      let optClass = &quot;rq-opt&quot;;
+      let badge = &quot;&quot;;
+
+      if (oIdx === q.a) {
+        optClass += &quot; opt-correct&quot;;
+        badge = `&lt;span class=&quot;tag green sm&quot;&gt;âœ” Correct Answer&lt;/span&gt;`;
+      } else if (oIdx === mine) {
+        optClass += &quot; opt-user-wrong&quot;;
+        badge = `&lt;span class=&quot;tag red sm&quot;&gt;âœ– Your Selection&lt;/span&gt;`;
+      }
+
+      return `
+        &lt;div class=&quot;${optClass}&quot;&gt;
+          &lt;div class=&quot;rq-opt-label&quot;&gt;
+            &lt;span class=&quot;rq-letter&quot;&gt;${&quot;ABCD&quot;[oIdx]}&lt;/span&gt;
+            &lt;span&gt;${escapeHtml(optText)}&lt;/span&gt;
+          &lt;/div&gt;
+          ${badge}
+        &lt;/div&gt;
+      `;
+    }).join(&quot;&quot;);
+
+    // Step-by-step explanation elements
+    const exp = q.explanation;
+    const stepsHtml = (exp.steps || []).map((st, stepNum) =&gt; `
+      &lt;li class=&quot;ab-step-item&quot;&gt;
+        &lt;span class=&quot;ab-step-num&quot;&gt;${stepNum + 1}&lt;/span&gt;
+        &lt;span&gt;${escapeHtml(st)}&lt;/span&gt;
+      &lt;/li&gt;
+    `).join(&quot;&quot;);
+
+    return `
+      &lt;div class=&quot;rq-card ${statusClass}&quot;&gt;
+        &lt;div class=&quot;rq-top&quot;&gt;
+          &lt;div class=&quot;rq-badges&quot;&gt;
+            &lt;span style=&quot;font-weight:800;color:var(--navy)&quot;&gt;Q${i + 1}&lt;/span&gt;
+            ${statusLabel}
+            &lt;span class=&quot;tag blue&quot;&gt;${escapeHtml(q.topic)}&lt;/span&gt;
+            &lt;span class=&quot;tag gray&quot;&gt;${escapeHtml(q.difficulty)}&lt;/span&gt;
+            &lt;span class=&quot;tag gray&quot;&gt;â± ${timeSpent}s spent&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;button class=&quot;rq-bookmark-btn ${isBookmarked ? &quot;saved&quot; : &quot;&quot;}&quot; onclick=&quot;toggleBookmark(&apos;${q.id}&apos;)&quot;&gt;
+              &lt;span&gt;â˜…&lt;/span&gt; ${isBookmarked ? &quot;Saved in Bookmarks&quot; : &quot;Bookmark for Revision&quot;}
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;rq-question-title&quot;&gt;${escapeHtml(q.q)}&lt;/div&gt;
+
+        &lt;div class=&quot;rq-options-list&quot;&gt;
+          ${optionsHtml}
+        &lt;/div&gt;
+
+        &lt;!-- In-Depth Step-by-Step Analysis --&gt;
+        &lt;div class=&quot;analysis-box&quot;&gt;
+          &lt;div class=&quot;ab-title&quot;&gt;
+            &lt;span&gt;ðŸ“&lt;/span&gt; Step-by-Step Mathematical &amp;amp; Logical Proof
+          &lt;/div&gt;
+          
+          &lt;p style=&quot;font-size:0.92rem;color:var(--muted)&quot;&gt;
+            &lt;b&gt;Concept:&lt;/b&gt; ${escapeHtml(exp.summary)}
+          &lt;/p&gt;
+
+          ${exp.formula ? `
+            &lt;div style=&quot;background:#fff;border:1px solid var(--blue-line);padding:8px 12px;border-radius:6px;font-family:monospace;font-size:0.88rem;color:var(--navy)&quot;&gt;
+              &lt;b&gt;Formula / Rule:&lt;/b&gt; ${escapeHtml(exp.formula)}
+            &lt;/div&gt;
+          ` : &quot;&quot;}
+
+          &lt;ul class=&quot;ab-steps&quot;&gt;
+            ${stepsHtml}
+          &lt;/ul&gt;
+
+          &lt;div class=&quot;ab-insight-grid&quot;&gt;
+            &lt;div class=&quot;ab-card tip&quot;&gt;
+              &lt;b&gt;âš¡ Speed Shortcut Tip:&lt;/b&gt;
+              ${escapeHtml(exp.speed_tip || &quot;Apply pattern recognition to bypass extensive manual calculation.&quot;)}
+            &lt;/div&gt;
+            &lt;div class=&quot;ab-card pitfall&quot;&gt;
+              &lt;b&gt;âš ï¸ Common Pitfall:&lt;/b&gt;
+              ${escapeHtml(exp.common_pitfall || &quot;Misreading inverse proportional relationships.&quot;)}
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+      &lt;/div&gt;
+    `;
+  }).join(&quot;&quot;);
+
+  container.innerHTML = renderedCount &gt; 0
+    ? cardsHtml
+    : `&lt;div class=&quot;topic-list-empty&quot;&gt;No questions match the selected filter.&lt;/div&gt;`;
+}
+
+/* ===========================================================
+   11. ANALYTICS &amp; WEAK POINTS DASHBOARD (Objective 6 Active)
+   =========================================================== */
+function renderAnalyticsDashboard() {
+  const history = getStoredJson(STORAGE_KEYS.HISTORY, []);
+  const topicStats = getStoredJson(STORAGE_KEYS.TOPIC_STATS, {});
+
+  // Update Profile Info
+  if (currentUser) {
+    $(&quot;analyticsUserGreeting&quot;).textContent = `${currentUser.name}&apos;s Preparation Analytics`;
+    $(&quot;analyticsUserTarget&quot;).textContent = `Target Goal: ${currentUser.targetGoal}`;
+  }
+
+  // Aggregate Metrics
+  const testsCount = history.length;
+  let totalQuestions = 0;
+  let totalCorrect = 0;
+
+  Object.values(topicStats).forEach(s =&gt; {
+    totalQuestions += s.attempted;
+    totalCorrect += s.correct;
+  });
+
+  const overallAccuracy = totalQuestions &gt; 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+  const weakTopics = computeWeakTopics();
+  const strongTopics = computeStrongTopics();
+
+  $(&quot;anaTestsCount&quot;).textContent = testsCount;
+  $(&quot;anaQuestionsCount&quot;).textContent = totalQuestions;
+  $(&quot;anaAccuracyPct&quot;).textContent = `${overallAccuracy}%`;
+  $(&quot;anaWeakCount&quot;).textContent = weakTopics.length;
+  $(&quot;weakAreaCountLabel&quot;).textContent = weakTopics.length;
+
+  // Render Exact Weak Points List
+  const weakContainer = $(&quot;weakTopicsList&quot;);
+  if (weakTopics.length === 0) {
+    weakContainer.innerHTML = `
+      &lt;div class=&quot;topic-list-empty&quot;&gt;
+        &lt;b&gt;No weak areas flagged!&lt;/b&gt;&lt;br&gt;
+        Your accuracy across attempted topics is currently above 60%. Take more tests across all 3 disciplines to challenge yourself.
+      &lt;/div&gt;
+    `;
+  } else {
+    weakContainer.innerHTML = weakTopics.map(w =&gt; `
+      &lt;div class=&quot;topic-stat-item&quot;&gt;
+        &lt;div class=&quot;tsi-top&quot;&gt;
+          &lt;span class=&quot;tsi-name&quot;&gt;${escapeHtml(w.topic)}&lt;/span&gt;
+          &lt;span class=&quot;tsi-pct weak&quot;&gt;${w.accuracy}% accuracy (${w.correct}/${w.attempted})&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;tsi-bar&quot;&gt;
+          &lt;div class=&quot;tsi-bar-fill weak&quot; style=&quot;width:${Math.max(8, w.accuracy)}%&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;tsi-advice&quot;&gt;
+          &lt;b&gt;Remedial Advice:&lt;/b&gt; ${escapeHtml(w.advice)}
+        &lt;/div&gt;
+      &lt;/div&gt;
+    `).join(&quot;&quot;);
+  }
+
+  // Render Strengths &amp; Interest Topics
+  const strongContainer = $(&quot;strongTopicsList&quot;);
+  let strongHtml = &quot;&quot;;
+
+  if (strongTopics.length &gt; 0) {
+    strongHtml += strongTopics.map(s =&gt; `
+      &lt;div class=&quot;topic-stat-item&quot;&gt;
+        &lt;div class=&quot;tsi-top&quot;&gt;
+          &lt;span class=&quot;tsi-name&quot;&gt;${escapeHtml(s.topic)}&lt;/span&gt;
+          &lt;span class=&quot;tsi-pct good&quot;&gt;${s.accuracy}% accuracy (${s.correct}/${s.attempted})&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;tsi-bar&quot;&gt;
+          &lt;div class=&quot;tsi-bar-fill good&quot; style=&quot;width:${s.accuracy}%&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;tsi-advice&quot; style=&quot;color:var(--good-dark)&quot;&gt;
+          &lt;b&gt;Command Level:&lt;/b&gt; Strong mastery. Maintain speed during practice sprints.
+        &lt;/div&gt;
+      &lt;/div&gt;
+    `).join(&quot;&quot;);
+  }
+
+  // Also display user&apos;s declared interest topics
+  if (currentUser &amp;&amp; currentUser.interestedTopics &amp;&amp; currentUser.interestedTopics.length &gt; 0) {
+    strongHtml += `
+      &lt;div style=&quot;margin-top:14px;padding-top:10px;border-top:1px dashed var(--blue-line)&quot;&gt;
+        &lt;div style=&quot;font-size:0.84rem;font-weight:700;color:var(--navy);margin-bottom:8px&quot;&gt;Declared Priority Focus Topics:&lt;/div&gt;
+        &lt;div style=&quot;display:flex;gap:6px;flex-wrap:wrap&quot;&gt;
+          ${currentUser.interestedTopics.map(t =&gt; `&lt;span class=&quot;tag purple&quot;&gt;â˜… ${escapeHtml(t)}&lt;/span&gt;`).join(&quot;&quot;)}
+        &lt;/div&gt;
+      &lt;/div&gt;
+    `;
+  }
+
+  if (!strongHtml) {
+    strongHtml = `&lt;div class=&quot;topic-list-empty&quot;&gt;Complete tests to unlock your strength profile!&lt;/div&gt;`;
+  }
+  strongContainer.innerHTML = strongHtml;
+
+  // Complete Topic Mastery Matrix
+  const matrixContainer = $(&quot;fullTopicMatrixList&quot;);
+  const allSubtopics = getAllUniqueSubtopics();
+  matrixContainer.innerHTML = allSubtopics.map(t =&gt; {
+    const st = topicStats[t];
+    const attempted = st ? st.attempted : 0;
+    const correct = st ? st.correct : 0;
+    const acc = attempted &gt; 0 ? Math.round((correct / attempted) * 100) : 0;
+    const statusTag = attempted === 0
+      ? `&lt;span class=&quot;tag gray sm&quot;&gt;Unattempted&lt;/span&gt;`
+      : (acc &gt;= 75 ? `&lt;span class=&quot;tag green sm&quot;&gt;${acc}% Strong&lt;/span&gt;` : (acc &gt;= 50 ? `&lt;span class=&quot;tag amber sm&quot;&gt;${acc}% Moderate&lt;/span&gt;` : `&lt;span class=&quot;tag red sm&quot;&gt;${acc}% Weak&lt;/span&gt;`));
+
+    return `
+      &lt;div style=&quot;background:#fff;border:1px solid var(--blue-line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:6px&quot;&gt;
+        &lt;div style=&quot;display:flex;justify-content:space-between;align-items:center&quot;&gt;
+          &lt;b style=&quot;font-size:0.9rem;color:var(--navy)&quot;&gt;${escapeHtml(t)}&lt;/b&gt;
+          ${statusTag}
+        &lt;/div&gt;
+        &lt;div style=&quot;font-size:0.8rem;color:var(--muted)&quot;&gt;
+          ${attempted &gt; 0 ? `Solved: ${correct}/${attempted} questions` : `No questions attempted yet`}
+        &lt;/div&gt;
+      &lt;/div&gt;
+    `;
+  }).join(&quot;&quot;);
+
+  // Test History Log Table
+  const tableBody = $(&quot;historyTableBody&quot;);
+  if (history.length === 0) {
+    tableBody.innerHTML = `&lt;tr&gt;&lt;td colspan=&quot;6&quot; style=&quot;text-align:center;color:var(--muted);padding:24px&quot;&gt;No test history recorded yet. Start your first practice session!&lt;/td&gt;&lt;/tr&gt;`;
+  } else {
+    tableBody.innerHTML = history.map(h =&gt; {
+      const min = Math.floor(h.timeSecs / 60);
+      const sec = String(h.timeSecs % 60).padStart(2, &quot;0&quot;);
+      const weakTags = (h.weakTopics || []).map(wt =&gt; `&lt;span class=&quot;tag red sm&quot; style=&quot;margin:2px&quot;&gt;${escapeHtml(wt)}&lt;/span&gt;`).join(&quot;&quot;);
+      return `
+        &lt;tr&gt;
+          &lt;td&gt;&lt;span style=&quot;font-size:0.84rem;color:var(--muted)&quot;&gt;${escapeHtml(h.date)}&lt;/span&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;b&gt;${escapeHtml(h.categoryName)}&lt;/b&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;b&gt;${h.scoreText}&lt;/b&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;span class=&quot;tag ${h.accuracyPct &gt;= 70 ? &quot;green&quot; : &quot;amber&quot;}&quot;&gt;${h.accuracyPct}%&lt;/span&gt;&lt;/td&gt;
+          &lt;td&gt;${min}:${sec}&lt;/td&gt;
+          &lt;td&gt;${weakTags || `&lt;span class=&quot;tag green sm&quot;&gt;Flawless&lt;/span&gt;`}&lt;/td&gt;
+        &lt;/tr&gt;
+      `;
+    }).join(&quot;&quot;);
+  }
+}
+
+function confirmClearHistory() {
+  if (confirm(&quot;Are you sure you want to clear your test history and diagnostic matrix? This will reset all weakness scores.&quot;)) {
+    localStorage.removeItem(STORAGE_KEYS.HISTORY);
+    localStorage.removeItem(STORAGE_KEYS.TOPIC_STATS);
+    renderAnalyticsDashboard();
+    updateWeakNavBadge();
+    refreshHomeUserBanner();
+    renderCategoryCards();
+  }
+}
+
+/* ===========================================================
+   12. BOOKMARKS SYSTEM
+   =========================================================== */
+function toggleBookmark(questionId) {
+  let bookmarks = getStoredJson(STORAGE_KEYS.BOOKMARKS, []);
+  if (bookmarks.includes(questionId)) {
+    bookmarks = bookmarks.filter(id =&gt; id !== questionId);
+  } else {
+    bookmarks.push(questionId);
+  }
+  setStoredJson(STORAGE_KEYS.BOOKMARKS, bookmarks);
+  updateBookmarksBadge();
+
+  // If in review view, re-render to update icon
+  if (!$(&quot;view-review&quot;).classList.contains(&quot;hidden&quot;)) {
+    renderReviewQuestions();
+  }
+  // If in bookmarks view, re-render list
+  if (!$(&quot;view-bookmarks&quot;).classList.contains(&quot;hidden&quot;)) {
+    renderBookmarksView();
+  }
+}
+
+function updateBookmarksBadge() {
+  const bookmarks = getStoredJson(STORAGE_KEYS.BOOKMARKS, []);
+  const el = $(&quot;navBookmarkCount&quot;);
+  if (el) el.textContent = bookmarks.length;
+}
+
+function findQuestionById(qId) {
+  for (const cat of Object.values(QUESTION_BANK)) {
+    const match = cat.questions.find(q =&gt; q.id === qId);
+    if (match) return match;
+  }
+  return null;
+}
+
+function renderBookmarksView() {
+  const bookmarks = getStoredJson(STORAGE_KEYS.BOOKMARKS, []);
+  const container = $(&quot;bookmarksList&quot;);
+  if (!container) return;
+
+  if (bookmarks.length === 0) {
+    container.innerHTML = `
+      &lt;div class=&quot;review-header-card&quot; style=&quot;text-align:center;padding:48px 24px&quot;&gt;
+        &lt;h3 style=&quot;color:var(--navy);font-size:1.3rem;margin-bottom:8px&quot;&gt;No Bookmarked Questions Yet&lt;/h3&gt;
+        &lt;p style=&quot;color:var(--muted);max-width:500px;margin:0 auto 18px&quot;&gt;
+          Whenever you take a test or review your answers, click the &quot;Bookmark for Revision&quot; button to collect challenging questions here for fast last-minute preparation.
+        &lt;/p&gt;
+        &lt;button class=&quot;btn&quot; onclick=&quot;showView(&apos;home&apos;)&quot;&gt;Browse Practice Tests&lt;/button&gt;
+      &lt;/div&gt;
+    `;
+    return;
+  }
+
+  container.innerHTML = bookmarks.map(qId =&gt; {
+    const q = findQuestionById(qId);
+    if (!q) return &quot;&quot;;
+
+    const exp = q.explanation;
+    const stepsHtml = (exp.steps || []).map((st, stepNum) =&gt; `
+      &lt;li class=&quot;ab-step-item&quot;&gt;
+        &lt;span class=&quot;ab-step-num&quot;&gt;${stepNum + 1}&lt;/span&gt;
+        &lt;span&gt;${escapeHtml(st)}&lt;/span&gt;
+      &lt;/li&gt;
+    `).join(&quot;&quot;);
+
+    return `
+      &lt;div class=&quot;rq-card&quot; style=&quot;border-left-color:var(--blue)&quot;&gt;
+        &lt;div class=&quot;rq-top&quot;&gt;
+          &lt;div class=&quot;rq-badges&quot;&gt;
+            &lt;span class=&quot;tag blue&quot;&gt;${escapeHtml(q.topic)}&lt;/span&gt;
+            &lt;span class=&quot;tag gray&quot;&gt;${escapeHtml(q.difficulty)}&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;button class=&quot;rq-bookmark-btn saved&quot; onclick=&quot;toggleBookmark(&apos;${q.id}&apos;)&quot;&gt;
+              &lt;span&gt;â˜…&lt;/span&gt; Remove Bookmark
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;rq-question-title&quot;&gt;${escapeHtml(q.q)}&lt;/div&gt;
+
+        &lt;div class=&quot;rq-options-list&quot;&gt;
+          ${q.o.map((optText, oIdx) =&gt; `
+            &lt;div class=&quot;rq-opt ${oIdx === q.a ? &quot;opt-correct&quot; : &quot;&quot;}&quot;&gt;
+              &lt;div class=&quot;rq-opt-label&quot;&gt;
+                &lt;span class=&quot;rq-letter&quot;&gt;${&quot;ABCD&quot;[oIdx]}&lt;/span&gt;
+                &lt;span&gt;${escapeHtml(optText)}&lt;/span&gt;
+              &lt;/div&gt;
+              ${oIdx === q.a ? `&lt;span class=&quot;tag green sm&quot;&gt;âœ” Correct Answer&lt;/span&gt;` : &quot;&quot;}
+            &lt;/div&gt;
+          `).join(&quot;&quot;)}
+        &lt;/div&gt;
+
+        &lt;div class=&quot;analysis-box&quot;&gt;
+          &lt;div class=&quot;ab-title&quot;&gt;
+            &lt;span&gt;ðŸ“&lt;/span&gt; Analytical Solution &amp;amp; Formula
+          &lt;/div&gt;
+          &lt;p style=&quot;font-size:0.92rem;color:var(--muted)&quot;&gt;&lt;b&gt;Concept:&lt;/b&gt; ${escapeHtml(exp.summary)}&lt;/p&gt;
+          ${exp.formula ? `&lt;div style=&quot;background:#fff;border:1px solid var(--blue-line);padding:8px 12px;border-radius:6px;font-family:monospace;font-size:0.88rem;color:var(--navy)&quot;&gt;&lt;b&gt;Formula:&lt;/b&gt; ${escapeHtml(exp.formula)}&lt;/div&gt;` : &quot;&quot;}
+          &lt;ul class=&quot;ab-steps&quot;&gt;${stepsHtml}&lt;/ul&gt;
+          &lt;div class=&quot;ab-insight-grid&quot;&gt;
+            &lt;div class=&quot;ab-card tip&quot;&gt;&lt;b&gt;âš¡ Speed Trick:&lt;/b&gt; ${escapeHtml(exp.speed_tip || &quot;&quot;)}&lt;/div&gt;
+            &lt;div class=&quot;ab-card pitfall&quot;&gt;&lt;b&gt;âš ï¸ Avoid:&lt;/b&gt; ${escapeHtml(exp.common_pitfall || &quot;&quot;)}&lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+      &lt;/div&gt;
+    `;
+  }).join(&quot;&quot;);
+}
+
+/* ===========================================================
+   13. KEYBOARD SHORTCUTS FOR ACCESSIBILITY &amp; SPEED
+   =========================================================== */
+window.addEventListener(&quot;keydown&quot;, (e) =&gt; {
+  // Only trigger keyboard shortcuts when test is actively running
+  if ($(&quot;view-test&quot;).classList.contains(&quot;hidden&quot;)) return;
+  if (e.target.tagName === &quot;INPUT&quot; || e.target.tagName === &quot;TEXTAREA&quot; || e.target.tagName === &quot;SELECT&quot;) return;
+
+  const key = e.key.toUpperCase();
+  if ([&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;].includes(key)) {
+    selectOption(parseInt(key) - 1);
+  } else if ([&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;].includes(key)) {
+    selectOption(&quot;ABCD&quot;.indexOf(key));
+  } else if (key === &quot;ARROWLEFT&quot; || key === &quot;P&quot;) {
+    navigateQuestion(-1);
+  } else if (key === &quot;ARROWRIGHT&quot; || key === &quot;N&quot;) {
+    navigateQuestion(1);
+  } else if (key === &quot;M&quot;) {
+    toggleMarkCurrentQuestion();
+  }
+});
+
+// Protect user from accidentally navigating away during an active test
+window.addEventListener(&quot;beforeunload&quot;, (e) =&gt; {
+  if (testTimerInterval) {
+    e.preventDefault();
+    e.returnValue = &quot;A practice test is currently in progress. Exiting will void your score.&quot;;
+  }
+});
+
+// Utility to prevent XSS in dynamic text
+function escapeHtml(str) {
+  if (typeof str !== &quot;string&quot;) return str;
+  return str.replace(/[&amp;&lt;&gt;&apos;&quot;]/g, tag =&gt; ({
+    &quot;&amp;&quot;: &quot;&amp;amp;&quot;,
+    &quot;&lt;&quot;: &quot;&amp;lt;&quot;,
+    &quot;&gt;&quot;: &quot;&amp;gt;&quot;,
+    &quot;&apos;&quot;: &quot;&amp;#39;&quot;,
+    &apos;&quot;&apos;: &quot;&amp;quot;&quot;
+  }[tag] || tag));
+}
+
+/* ===========================================================
+   14. INITIALIZATION
+   =========================================================== */
+window.addEventListener(&quot;DOMContentLoaded&quot;, () =&gt; {
+  initAuth();
+  renderCategoryCards();
+  updateWeakNavBadge();
+  updateBookmarksBadge();
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+</body>
+</html>
